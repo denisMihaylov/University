@@ -9,7 +9,8 @@ class RationalSequence
     if @size.nil?
       enum_for(:each_rational).lazy.each {|rational| yield rational}
     else
-      enum_for(:each_rational).lazy.take(@size).each {|rational| yield rational}    end
+      enum_for(:each_rational).lazy.take(@size).each {|rational| yield rational}
+    end
   end
 
   private
