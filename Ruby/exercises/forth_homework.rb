@@ -70,8 +70,7 @@ class Deck
   end
 
   def to_s
-    @cards.each {|card| puts card}
-    nil
+    @cards.reduce {|result, card| result.to_s + "\n" + card.to_s}
   end
 
   private
@@ -81,7 +80,7 @@ class Deck
       when WarDeck then @ranks = Card::RANKS
       when BeloteDeck then @ranks = Card::BELOTE_RANKS
       when SixtySixDeck then @ranks = Card::BELOTE_RANKS.drop(2)
-      else raise ArguementError, 'This is not a known game.'
+      else raise ArgumentError, 'This is not a known game.'
     end
   end
 
@@ -131,7 +130,6 @@ end
 
 class Hand
 
-  attr_accessor :cards
   def initialize(cards)
     @cards = cards
   end
