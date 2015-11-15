@@ -4,12 +4,12 @@ require 'digest/sha1'
 class Time
 
   def to_git_s
-    offset_in_seconds = self.utc_offset
+    offset_in_seconds = utc_offset
     sign = offset_in_seconds < 0 ? '-' : '+'
     minutes = offset_in_seconds.abs / 60
     hours = "%02d" % (minutes / 60)
     minutes = "%02d" % (minutes % 60)
-    self.strftime("%a %b %d %H:%M:%S %Y ") + sign + hours + minutes
+    strftime("%a %b %d %H:%M:%S %Y ") + sign + hours + minutes
   end
 
 end
@@ -17,11 +17,7 @@ end
 class ObjectStore
 
   def self.init
-    @repo = if block_given?
-      Repository.new(&(proc))
-    else
-      Repository.new
-    end
+    @repo = block_given? ? Repository.new(&(proc)) : Repository.new
   end
 
   def add(name, object)
@@ -67,8 +63,8 @@ class ObjectStore::Repository
     @head = nil
     @current_branch = :master
     @branch_to_head = {}
-    update_branch(@current_branch)
     @staging_objects = {}
+    update_branch
     instance_eval(&(proc)) if block_given?
   end
 
@@ -100,7 +96,7 @@ class ObjectStore::Repository
     else
       objects = @staging_objects.values
       @head = Commit.new(Time.now, message, objects, @head)
-      update_branch(@current_branch)
+      update_branch
       result_message = "#{message}\n\t#{@staging_objects.size} objects changed"
       @staging_objects = {}
       success = true
@@ -119,22 +115,17 @@ class ObjectStore::Repository
   end
 
   def checkout(commit_hash)
-    unless commited?(commit_hash)
-      operation_result("Commit #{commit_hash} does not exist.", false)
-    else
-      until @head.hash == commit_hash
-        @head = @head.next
-      end
-      update_branch(@current_branch)
+    if commited?(commit_hash)
+      @head = @head.next until @head.hash == commit_hash
+      update_branch
       operation_result("HEAD is now at #{commit_hash}.", true, @head)
+    else
+      operation_result("Commit #{commit_hash} does not exist.", false)
     end
   end
 
   def branch
-    if @branch.nil?
-      @branch = Branch.new(self)
-    end
-    @branch
+    @branch or @branch = Branch.new(self)
   end
 
   def log
@@ -164,17 +155,15 @@ class ObjectStore::Repository
     any? {|commit| commit.hash == commit_hash}
   end
 
-  def update_branch(branch)
-    @branch_to_head[branch] = @head
+  def update_branch
+    @branch_to_head[@current_branch] = @head
   end
 
   def latest_version_of_object(name)
     commit = find do |commit|
-      commit.objects.any? {|object| object.name == name}
+      commit.objects.any? { |object| object.name == name }
     end
-    unless commit.nil?
-      commit.objects.find {|object| object.name == name}
-    end
+    commit.objects.find { |object| object.name == name } unless commit.nil?
   end
 
 end
@@ -210,23 +199,23 @@ class ObjectStore::Repository::Branch
     if exists?(branch_name)
       operation_result("Branch #{branch_name} already exists.", false)
     else
-      @repo.branch_to_head[branch_name.to_sym] = @repo.head
+      @repo.branch_to_head[branch_name.to_sym] = @repo.head.result
       operation_result("Created branch #{branch_name}.")
     end
   end
 
   def checkout(branch_name)
-    unless exists?(branch_name)
-      operation_result("Branch #{branch_name} does not exist.", false)
-    else
+    if exists?(branch_name)
       @repo.head = @repo.branch_to_head[branch_name.to_sym]
       @repo.current_branch = branch_name.to_sym
       operation_result("Switched to branch #{branch_name}.")
+    else
+      operation_result("Branch #{branch_name} does not exist.", false)
     end
   end
 
   def remove(branch_name)
-    current = (@repo.branch_to_head[branch_name.to_sym] == @repo.head)
+    current = (@repo.branch_to_head[branch_name.to_sym] == @repo.head.result)
     if exists?(branch_name) and current
       operation_result("Cannot remove current branch.", false)
     elsif exists?(branch_name)
@@ -239,7 +228,7 @@ class ObjectStore::Repository::Branch
 
   def list
     list = @repo.branch_to_head.keys.map {|branch| branch.to_s}.sort
-    list = "  " + list.join("\n  ")
+    list = "  #{list.join("\n  ")}"
     list[list.index(@repo.current_branch.to_s) - 2] = '*'
     list
   end
@@ -257,11 +246,7 @@ class ObjectStore::Repository::Object
 
   def initialize(name, object, state)
     @name = name
-    begin
-      @object = object.dup
-    rescue Exception
-      @object = object
-    end
+    set_object(object)
     @state = state
   end
 
@@ -274,7 +259,15 @@ class ObjectStore::Repository::Object
   end
 
   def inspect
-    "<@name = #{@name}, @object = #{@object}, @state = #{state}>"
+    "<@name = #@name, @object = #@object, @state = #{state}>"
+  end
+
+  private
+
+  def set_object(object)
+    @object = object.dup
+  rescue Exception
+    @object = object
   end
 
 end
