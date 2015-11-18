@@ -1,0 +1,68 @@
+%first item in the list
+%first(list, first_member).
+first([X|_], X).
+
+%last item in the list
+%last(list, last_item)
+last([X], X).
+last([_|T], X):-last(T, X).
+
+%member predicate
+%my_member(number, list).
+my_member(X, [X|_]).
+my_member(X, [_|T]):-my_member(X, T).
+
+%append predicate
+%my_append(list1, list2, result_list).
+my_append([], List, List).
+my_append([H|T], List, [H|List1]):-my_append(T, List, List1).
+
+%prefix predicate
+%prefix(Prefix, List).
+prefix(Prefix, List):-my_append(Prefix, _, List).
+
+%suffix predicate
+%suffix(Suffix, List).
+suffix(Suffix, List):-my_append(_, Suffix, List).
+
+%sublist predicate
+%my_sublist(Sublist, List).
+my_sublist(Sublist, List):-suffix(Suffix, List), prefix(Sublist, Suffix).
+my_sublist2(Sublist, List):-my_append(B, _, List), my_append(_, Sublist, B).
+
+last2(List, Last):-suffix([Last], List).
+last3(List, Last):-my_append(_, [Last], List).
+
+%subset predicate
+%subset(subset, list).
+subset_wrong([H|T], L):-member(H, L), subset(T, L). %endless cycle -> not a single result
+subset([], _).
+subset([H|S], [H|T]):-subset(S, T).
+subset(S, [_|T]):-subset(S, T).
+
+subset2([], _).
+subset2([H|S], List):-my_append(_, [H|B], List), subset(S, B).
+
+%remove predicate
+%remove(X, List, Result)
+remove_bad(X, List, Result):-my_append(A, [X| B], List), my_append(A, B, Result). %remove(3, X, [1,2,4]) cycles!
+remove(X, [X|T], T).
+remove(X, [H|T], [H|L]):-remove(X, T, L).
+
+%add predicate
+%add(X, List, Result)
+add(X, List, Result):-remove(X, Result, List).
+
+%permutation predicate
+%perm(Perm, List).
+perm([], []).
+perm([H|T], List):-remove(H, List, List1), perm(T, List1).
+
+perm2([], []).
+perm2(Perm, [H|T]):-perm2(AB, T), my_append(A, B, AB), my_append(A, [H|B], Perm).
+
+%any-p -> is there any member X of the List that p(X)
+any-p(List):-member(X, List), even(X).
+
+%all-p -> for every member X of the List => p(X)
+all-p(List):-not(( member(X, List), not(even(X)) )).
