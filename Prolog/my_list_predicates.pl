@@ -66,3 +66,53 @@ any-p(List):-member(X, List), even(X).
 
 %all-p -> for every member X of the List => p(X)
 all-p(List):-not(( member(X, List), not(even(X)) )).
+
+%min(Min, List) -> finds the minimal element of a List. Pretty slow.
+min_bad(Min, [Min]).
+min_bad(Min, [H|T]):-min_bad(Min, T), less(Min, H).
+min_bad(Min, [Min|T]):-min_bad(H, T), not(less(H, Min)).
+
+min(Min, [Min]).
+min(Min, [H|T]):-min(Min1, T), min_help(Min1, H, Min).
+min_help(A, B, A):-less(A, B).
+min_help(A, B, B):-not(less(A, B)).
+
+min2(Min, [Min]).
+min2(Min, List):-member(Min, List), not(( member(X, List), less(X, Min) )).
+
+%length predicate
+my_length([], 0).
+my_length([_|T], Length):-my_length(T, Length1), Length is Length1 + 1.
+
+%sum predicate
+sum([], 0).
+sum([H|T], Sum):- sum(T, Sum1), Sum is Sum1 + H.
+
+%nmember predicate -> the nth member of the list. Indexing starts from 0.
+%this works only when trying to find the nth member. ?- nmember([1,2,3], X, N) will fail
+nmember_bad([H|_], 0, H).
+nmember_bad([_|T], N, H):-N1 is N - 1, nmember_bad(T, N1, H).
+
+nmember([H|_], 0, H).
+nmember([_|T], N, H):-nmember(T, N1, H), N is N1 + 1.
+
+%reverse predicate
+%reverse(List, Reversed).
+my_reverse([], []).
+my_reverse([H|T], Reversed):-my_reverse(T, Reversed1), my_append(Reversed1, [H], Reversed).
+
+%split predicate -> splits a list into a list of lists.
+split([], []).
+split(List, [Pref|T]):-my_append(Pref, Suff, List), Pref \= [], split(Suff, T).
+
+
+
+
+
+
+
+
+
+
+
+
