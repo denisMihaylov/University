@@ -9,7 +9,7 @@ class Time
     minutes = offset_in_seconds.abs / 60
     hours = "%02d" % (minutes / 60)
     minutes = "%02d" % (minutes % 60)
-    strftime("%a %b %d %H:%M:%S %Y ") + sign + hours + minutes
+    strftime("%a %b %02d %02H:%02M %Y ") + sign + hours + minutes
   end
 
 end
@@ -31,7 +31,7 @@ module ObjectStore::Operation
   class Result
     attr_reader :message, :result
 
-    def initialize(message, success, result = nil)
+    def initialize(message, success, result)
       @message = message
       @success = success
       @result = result
@@ -101,7 +101,7 @@ class ObjectStore::Repository
       @staging_objects = {}
       success = true
     end
-    operation_result(result_message, success)
+    operation_result(result_message, success, @head)
   end
 
   def remove(name)
@@ -161,20 +161,22 @@ class ObjectStore::Repository
 
   def latest_version_of_object(name)
     commit = find do |commit|
-      commit.objects.any? { |object| object.name == name }
+      commit.internal_objects.any? { |object| object.name == name }
     end
-    commit.objects.find { |object| object.name == name } unless commit.nil?
+    commit.internal_objects.find do
+      |object| object.name == name
+    end unless commit.nil?
   end
 
 end
 
 class ObjectStore::Repository::Commit
-  attr_accessor :date, :message, :objects, :next
+  attr_accessor :date, :message, :internal_objects, :next
 
-  def initialize(date, message, objects, next_commit)
+  def initialize(date, message, internal_objects, next_commit)
     @date = date
     @message = message
-    @objects = objects
+    @internal_objects = internal_objects
     @next = next_commit
   end
 
@@ -184,6 +186,15 @@ class ObjectStore::Repository::Commit
 
   def to_s
     "Commit #{hash}\nDate: #{date.to_git_s}\n\n\t#{message}"
+  end
+
+  def objects(taken_objects = [])
+    objects = @internal_objects.select do |object|
+      (not taken_objects.include?(object.name)) and object.state == :added
+    end
+    @internal_objects.each {|object| taken_objects << object.name}
+    next_objects = @next.nil? ? [] : @next.objects(taken_objects)
+    objects.map {|object| object.object} + next_objects
   end
 
 end
@@ -215,7 +226,7 @@ class ObjectStore::Repository::Branch
   end
 
   def remove(branch_name)
-    current = (@repo.branch_to_head[branch_name.to_sym] == @repo.head.result)
+    current = list.message.include?("* " + branch_name)
     if exists?(branch_name) and current
       operation_result("Cannot remove current branch.", false)
     elsif exists?(branch_name)
@@ -230,7 +241,7 @@ class ObjectStore::Repository::Branch
     list = @repo.branch_to_head.keys.map {|branch| branch.to_s}.sort
     list = "  #{list.join("\n  ")}"
     list[list.index(@repo.current_branch.to_s) - 2] = '*'
-    list
+    operation_result(list)
   end
 
   private
