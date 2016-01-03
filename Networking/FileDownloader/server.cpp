@@ -14,13 +14,36 @@
 #include <fcntl.h>
 
 #define PORT 4441
-#define MAXDATASIZE 1452
+#define MAXDATASIZE 65536
 #define BACKLOG 10
 #define FILES_PATH "../"
 
-void send_file(const char *path = "../client.cpp") {
-    int fd = open(path, O_RDONLY);
-    
+char* pwd[256];
+
+void send_file(const int sock_fd, const int file_fd) {
+    char buffer[MAXDATASIZE + 1];
+    while(read(file_fd, buffer, MAXDATASIZE) != 0) {
+        if (send(sock_fd, buffer, MAXDATASIZE, 0) == -1) {
+            perror("send");
+            close(file_fd);
+            exit(0);
+        }
+    }
+    close(file_fd);
+}
+
+void send_directories(const int sock_fd, const string path) {
+    int fd[2];
+    pipe(fd);
+    if (fork()) {
+        close(fd[0]);
+        close(1);
+        dup(fd[1]);
+        execlp("ls", "ls", "-1", path[0], (char*)NULL);
+    } else {
+        close(fd[1]);
+        send_file(sock_fd, fd[0]);
+    }    
 }
 
 int main() {
@@ -62,16 +85,14 @@ int main() {
           return 1;
         }
         if (!fork()) {
-            printf("Receiving...\n");
+            string path = "../";
+            send_directories(new_fd, path);
             while ((numbytes = recv(new_fd, buf, MAXDATASIZE, 0)) != 0) {
                 if (numbytes == -1) {
                     perror("recv");
                     return 1;
                 }
-                if (send(new_fd, buf, MAXDATASIZE, 0) == -1) {
-                    perror("send");
-                    return 0;
-                }
+                //send_file(new_fd);
             }
             //handle closing of the connection from the client
             close(my_fd);

@@ -11,13 +11,15 @@
 #include <arpa/inet.h>
 
 #define PORT 4441
-#define MAXDATASIZE 1452
+#define MAXDATASIZE 65536
 #define INET_ADDR "192.168.100.2"
+
+int split_message(string message, string[] result);
 
 int main() {
     printf("Initializing client...\n");
-    int my_fd, numbytes;  
-    char buf[MAXDATASIZE];
+    int my_fd, numbytes;
+    char buf[MAXDATASIZE + 1];
     struct sockaddr_in my_sock;
     my_sock.sin_family = AF_INET;
     if (inet_pton(AF_INET, INET_ADDR, &(my_sock.sin_addr)) != 1) {
@@ -40,20 +42,24 @@ int main() {
     }
     
     char input[MAXDATASIZE];
-    printf("Command:");
-    scanf("%s", input);
     while(strcmp(input, "exit") != 0) {
-        if (send(my_fd, input, MAXDATASIZE, 0) == -1)
-            perror("send");
-        char buf[MAXDATASIZE + 1];
+        //if (send(my_fd, input, MAXDATASIZE, 0) == -1)
+           //perror("send");
         if ((numbytes = recv(my_fd, buf, MAXDATASIZE, 0)) == -1) {
             perror("recv");
             exit(1);
         }
-        printf("%s\n", buf);
-        printf("Command:");
-        scanf("%s", input);
+        string directory[15];
+        int n = split_string(buf, directory);
+        for (int i = 0; i < n; i++) {
+            printf("%d. %s\n", i, directory[i])
+        //printf("Command:");
+        //scanf("%s", input);
     }
 
     return 0;
+}
+
+int split_message(string message, string[] result) {
+    
 }
