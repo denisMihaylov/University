@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	}
 
 	my_fd=socket(PF_INET6,SOCK_STREAM,0);
-	if(my_fd==-1){
+	if(my_fd == -1) {
 		perror("socket");
 		return 1;
 	}
