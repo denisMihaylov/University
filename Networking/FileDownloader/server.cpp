@@ -13,7 +13,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define PORT 4441
+#define PORT 4444
 #define MAXDATASIZE 65536
 #define BACKLOG 10
 #define FILES_PATH "../"
@@ -32,14 +32,14 @@ void send_file(const int sock_fd, const int file_fd) {
     close(file_fd);
 }
 
-void send_directories(const int sock_fd, const string path) {
+void send_directories(const int sock_fd, const char* path) {
     int fd[2];
     pipe(fd);
     if (fork()) {
         close(fd[0]);
         close(1);
         dup(fd[1]);
-        execlp("ls", "ls", "-1", path[0], (char*)NULL);
+        execlp("ls", "ls", "-1", path, (char*)NULL);
     } else {
         close(fd[1]);
         send_file(sock_fd, fd[0]);
@@ -47,7 +47,6 @@ void send_directories(const int sock_fd, const string path) {
 }
 
 int main() {
-    printf("Initializing server...\n");
     char buf[MAXDATASIZE];
     struct in_addr my_addr;
     struct sockaddr_in my_sock;
@@ -63,13 +62,11 @@ int main() {
         return 0;
     }
 
-    printf("Binding...\n");
     if(bind(my_fd, (struct sockaddr *)&my_sock, sizeof my_sock) == -1) {
         perror("bind");
         return 0;
     }
 
-    printf("Listening on port %d\n", PORT);
     if (listen(my_fd, BACKLOG) == -1) {
         perror("listen");
         return 0;
@@ -78,14 +75,13 @@ int main() {
     socklen_t sin_size = sizeof(their_addr);
 
     while(1){
-        printf("Accepting...\n");
         new_fd = accept(my_fd, (struct sockaddr *)&their_addr, &sin_size);
         if (new_fd == -1) {
           perror("accept");
           return 1;
         }
         if (!fork()) {
-            string path = "../";
+            char path[] = "../";
             send_directories(new_fd, path);
             while ((numbytes = recv(new_fd, buf, MAXDATASIZE, 0)) != 0) {
                 if (numbytes == -1) {

@@ -10,14 +10,26 @@
 
 #include <arpa/inet.h>
 
-#define PORT 4441
+#define PORT 4444
 #define MAXDATASIZE 65536
-#define INET_ADDR "192.168.100.2"
+#define INET_ADDR "10.255.3.96"
 
-int split_message(string message, string[] result);
+int split_string(char* message, char** result) {
+    char* pch;
+    int i = 0;
+    pch = strtok(message, "\n");
+    while (pch != NULL) {
+        result[i++] = pch;
+        pch = strtok(NULL, "\n");
+    }
+    return i;
+}
+
+void printHelp();
 
 int main() {
-    printf("Initializing client...\n");
+    system("clear");
+    printf("Welcome to the File Downloader!\n\tCreated by: Denis Mihaylov\n");
     int my_fd, numbytes;
     char buf[MAXDATASIZE + 1];
     struct sockaddr_in my_sock;
@@ -28,13 +40,11 @@ int main() {
     }
     my_sock.sin_port = htons(PORT);
 
-    printf("Creating socket...\n");
     if((my_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("socket");
         return 1;
     }
 
-    printf("Connecting to server...\n");
     if(connect(my_fd, (struct sockaddr *)&my_sock, sizeof my_sock) == -1) {
         close(my_fd);
         perror("client: connect");
@@ -42,24 +52,33 @@ int main() {
     }
     
     char input[MAXDATASIZE];
+    printf("\nHere is the complete list of available directories\n"
+              "Note: Files have extensions, directories do not!\n");
+    if ((numbytes = recv(my_fd, buf, MAXDATASIZE, 0)) == -1) {
+        perror("recv");
+        exit(1);
+    }
+    char* directory[15];
+    int n = split_string(buf, directory);
+    for (int i = 0; i < n; i++)
+        printf("%d. %s\n", i, directory[i]);
     while(strcmp(input, "exit") != 0) {
-        //if (send(my_fd, input, MAXDATASIZE, 0) == -1)
-           //perror("send");
-        if ((numbytes = recv(my_fd, buf, MAXDATASIZE, 0)) == -1) {
-            perror("recv");
-            exit(1);
+        printf("\nCommand (for help type \"help\"): ");
+        scanf("%s", input);
+        if (!strcmp(input, "help")) {
+            printHelp();
         }
-        string directory[15];
-        int n = split_string(buf, directory);
-        for (int i = 0; i < n; i++) {
-            printf("%d. %s\n", i, directory[i])
-        //printf("Command:");
-        //scanf("%s", input);
+        if (send(my_fd, input, strlen(input), 0) == -1)
+           perror("send");
+        
+        
     }
 
     return 0;
 }
 
-int split_message(string message, string[] result) {
-    
+void printHelp() {
+    printf("Available Commands:\n\thelp - shows all available commands\n"
+           "\tcd _ - changes the directory to the one defined by _. Using \"cd ..\" will navigate to the parent directory\n"
+           "\t\n");
 }
