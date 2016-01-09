@@ -20,6 +20,8 @@ class Spreadsheet
     @sheet[row][column].to_s
   end
 
+  alias [] cell_at
+
   private
 
   def validate_cell_index_format(cell_index)
@@ -34,7 +36,7 @@ class Spreadsheet
     column = column.split("").map() do |letter|
       letter.ord - "A".ord
     end.reduce(&:+) + 26 * (column.size - 1)
-    p [row, column]
+    [row, column]
   end
 
 end
