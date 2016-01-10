@@ -116,8 +116,8 @@ end
 module SpreadsheetInternal
 
   def validate_cell_index_format(cell_index)
-    unless TABLE_CELL_PATTERN === cell_index
-      raise Error, "Invalid cell index #{cell_index}"
+    unless Spreadsheet::TABLE_CELL_PATTERN === cell_index
+      raise Spreadsheet::Error, "Invalid cell index #{cell_index}"
     end
   end
 
