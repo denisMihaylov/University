@@ -19,6 +19,8 @@
 #define MAXDATASIZE 65536
 #define INET_ADDR "192.168.1.104"
 #define MAX_DOWNLOADS 10
+#define COLOR "\x1B[35m"
+#define RESET "\033[0m"
 
 int my_fd, numbytes;
 int shmkey_start = 100;
@@ -54,7 +56,7 @@ int connect_to_port(int port);
 
 int main() {
     system("clear");
-    printf("Welcome to the File Downloader!\n\tCreated by: Denis Mihaylov\n");
+    printf("Welcome to the " COLOR "File Downloader" RESET "!\n\tCreated by: " COLOR "Denis Mihaylov\n" RESET);
     my_fd = connect_to_port(PORT);
     
     input = (char *)malloc(MAXDATASIZE * sizeof(char));
@@ -116,9 +118,17 @@ void handle_input() {
             printf("No such file in the directory\n");
             return;
         }
+        int i;
+        for (i = 5; i < strlen(input); i++)
+            if (input[i] == '.')
+                break;
+        if (i == strlen(input)) {
+            printf("Wanted resource is not a file!\n");
+            return;
+        }
         start_download();
-        printf("The downloading has started\n"
-               "To check the status of the downloading use the status command\n");
+        printf("The downloading of file '%s' has started\n"
+               "To check the status of the downloading use the status command\n", &input[5]);
     } else if (!strncmp(input, "status", 6)) {
         if (download == 0) {
             printf("No active downloads\n");
@@ -258,11 +268,11 @@ int recv_from_server(int my_fd, void* buf) {
 }
 
 void print_help() {
-    printf("Available Commands:\n\thelp - shows all available commands\n"
-           "\tls - lists all possible directories\n"
-           "\tcd DIR - changes the directory to the one defined by DIR. "
-           "Using \"cd ..\" will navigate to the parent directory(There is autocompletion!)\n"
-           "\tdown file_name path - downloads the file\n"
-           "\tstatus - checks the status of all the downloads\n"
-           "\texit - leaves the application\n");
+    printf("Available Commands:\n\t" COLOR "help" RESET " - shows all available commands\n"
+           "\t" COLOR "ls" RESET " - lists all possible directories\n"
+           "\t" COLOR "cd DIR" RESET " - changes the directory to the one defined by DIR. "
+           "Using \"cd ..\" will navigate to the parent directory(There is " COLOR "autocompletion!" RESET ")\n"
+           "\t" COLOR "down file_name" RESET " - downloads the file\n"
+           "\t" COLOR "status" RESET " - checks the status of all the downloads\n"
+           "\t" COLOR "exit" RESET " - leaves the application\n");
 }
