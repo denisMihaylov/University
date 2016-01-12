@@ -10,6 +10,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/wait.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 #include <arpa/inet.h>
 
@@ -19,13 +21,14 @@
 #define MAX_DOWNLOADS 10
 
 int my_fd, numbytes;
+int shmkey_start = 100;
 char buf[MAXDATASIZE + 1];
 char* directory[50];
 int directory_count;
 size_t file_size[MAX_DOWNLOADS];
 char download_file_name[MAX_DOWNLOADS][50];
 char* input;
-int pipes[MAX_DOWNLOADS][2];
+char* progress[MAX_DOWNLOADS];
 int download = 0;
 size_t size;
 
@@ -121,24 +124,24 @@ void handle_input() {
             printf("No active downloads\n");
         } else {
             int i, j;
-            printf("%d\n", download);
             for (i = 0, j = 0; i < download; i++) {
-                char progress[5];
-                int a = read(pipes[i][0], progress, 5);
-                progress[a] = '\0';
-                printf("%s: %s%%\n", download_file_name[i], progress);
-                if (strcmp(progress, "100")) {
+                printf("%s: %s%%\n", download_file_name[i], progress[i]);
+                if (strcmp(progress[i], "100")) {
                     j++;
                     if (j < i) {
-                        pipes[j][0] = pipes[i][0];
-                        pipes[j][1] = pipes[i][1];
+                        progress[j] = progress[i];
                         memset(download_file_name[j], 0, sizeof(download_file_name[j]));
                         strcpy(download_file_name[j], download_file_name[i]);
                     }
+                } else if (shmdt(progress[i]) == -1) {
+                    perror("shmdt parent");
                 }
             }
             download = j;
         }
+    } else if(!strncmp(input, "ls", 2)) {
+        for(int i = 0; i < directory_count; i++)
+            printf("%d. %s\n", i, directory[i]);
     } else {
         printf("No such command\n");
     }
@@ -157,9 +160,22 @@ void start_download() {
     response result;
     recv_from_server(my_fd, &result);
     file_size[current_download] = result.size;
-    pipe(pipes[current_download]);
+    int shmid;
+    int key = shmkey_start++;
+    if ((shmid = shmget(key, 10, IPC_CREAT | SHM_R | SHM_W)) < 0) {
+        perror("shmget");
+        exit(0);
+    }
+    if ((progress[current_download] = (char*)shmat(shmid, NULL, 0)) == (char*) -1) {
+        perror("shmat 1");
+        exit(0);
+    }
     if (!fork()) {
-        close(pipes[current_download][0]);
+        char* prog;
+        if ((prog = (char*)shmat(shmid, NULL, 0)) == (char*) -1) {
+            perror("shmat 2");
+            exit(0);
+        }
         int download_fd = connect_to_port(PORT + 1);
         char buffer[MAXDATASIZE + 1];
         int bytes;
@@ -180,17 +196,15 @@ void start_download() {
                 perror("sprintf");
                 exit(0);
             }
-            //need to flush the buffer of the pipe
-            
-            if (write(pipes[current_download][1], tmp, strlen(tmp)) == -1) {
-                perror("write progress to pipe");
-                exit(0);
-            }
+            memset(prog, 0, sizeof(prog));
+            strcpy(prog, tmp);
         }
         close(file_fd);
+        if (shmdt(prog) == -1) {
+            perror("shmdt child");
+        }
         exit(0);
     }
-    close(pipes[current_download][1]);
 }
 
 void reset_directories() {
@@ -245,9 +259,10 @@ int recv_from_server(int my_fd, void* buf) {
 
 void print_help() {
     printf("Available Commands:\n\thelp - shows all available commands\n"
+           "\tls - lists all possible directories\n"
            "\tcd DIR - changes the directory to the one defined by DIR. "
            "Using \"cd ..\" will navigate to the parent directory(There is autocompletion!)\n"
            "\tdown file_name path - downloads the file\n"
            "\tstatus - checks the status of all the downloads\n"
-           "\texit - leaves the application");
+           "\texit - leaves the application\n");
 }
