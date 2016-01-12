@@ -73,7 +73,7 @@ int main() {
                 while ((numbytes = recv(new_fd, buf, MAXDATASIZE, 0)) != 0) {
                     if (numbytes == -1) {
                         perror("recv");
-                        return 1;
+                        exit(1);
                     }
                     if(!strncmp(buf, "cd", 2)) {
                         escape_spaces(&buf[3]);
@@ -91,10 +91,9 @@ int main() {
                 //handle closing of the connection from the client
                 close(my_fd);
                 close(new_fd);
-                return 0; 
+                exit(0); 
             }
         }
-
         return 0;
     } else {//listen for new download requests
         my_sock.sin_port = htons(PORT + 1);
@@ -166,7 +165,7 @@ int occurrances_in_string(char* input, char search) {
 void send_directories(const int sock_fd, const char* path) {
     int fd[2];
     pipe(fd);
-    if (fork()) {
+    if (!fork()) {
         close(fd[0]);
         close(1);
         dup(fd[1]);
@@ -178,16 +177,19 @@ void send_directories(const int sock_fd, const char* path) {
 }
 
 void send_file(const int sock_fd, const int file_fd) {
-    if(fork()) {
+    if(!fork()) {
         char buffer[MAXDATASIZE + 1];
-        memset(buffer, 0, sizeof(buffer));
-        while(read(file_fd, buffer, MAXDATASIZE) != 0) {
-            if (send(sock_fd, buffer, strlen(buffer), 0) == -1) {
+        int bytes = 1;
+        while(bytes) {
+            if ((bytes = read(file_fd, buffer, MAXDATASIZE)) == -1) {
+                perror("read from file");
+                exit(0);
+            }
+            if (send(sock_fd, buffer, bytes, 0) == -1) {
                 perror("send");
                 close(file_fd);
                 exit(0);
             }
-            memset(buffer, 0, sizeof(buffer));
         }
         close(file_fd);
         exit(0);

@@ -15,7 +15,7 @@
 
 #define PORT 5557
 #define MAXDATASIZE 65536
-#define INET_ADDR "192.168.0.107"
+#define INET_ADDR "192.168.1.104"
 #define MAX_DOWNLOADS 10
 
 int my_fd, numbytes;
@@ -124,7 +124,6 @@ void handle_input() {
             printf("%d\n", download);
             for (i = 0, j = 0; i < download; i++) {
                 char progress[5];
-                lseek(pipes[i][0], 0, SEEK_SET);
                 int a = read(pipes[i][0], progress, 5);
                 progress[a] = '\0';
                 printf("%s: %s%%\n", download_file_name[i], progress);
@@ -170,15 +169,23 @@ void start_download() {
         int progress = 0;
         while(progress < 100) {
             bytes = recv_from_server(download_fd, buffer);
-            lseek(pipes[current_download][1], 0, SEEK_SET);
             total_bytes += bytes;
             progress = total_bytes*100/file_size[current_download];
-            write(file_fd, buffer, bytes);
+            if (write(file_fd, buffer, bytes) == -1) {
+                perror("download to file");
+                exit(0);
+            }
             char tmp[12]={0x0};
-            sprintf(tmp,"%d", progress);
-            write(pipes[current_download][1], tmp, strlen(tmp));
-            printf("%d, %s\n", (int)strlen(tmp), tmp);
-            char a[5];
+            if (sprintf(tmp,"%d", progress) < 0) {
+                perror("sprintf");
+                exit(0);
+            }
+            //need to flush the buffer of the pipe
+            
+            if (write(pipes[current_download][1], tmp, strlen(tmp)) == -1) {
+                perror("write progress to pipe");
+                exit(0);
+            }
         }
         close(file_fd);
         exit(0);
