@@ -12,6 +12,10 @@ last([_|T], X):-last(T, X).
 my_member(X, [X|_]).
 my_member(X, [_|T]):-my_member(X, T).
 
+edges1([[U,V]],[U,V]).
+edges1([[L,R]|T], [L,R|P]):-edges1(T,P).
+
+
 %append predicate
 %my_append(list1, list2, result_list).
 my_append([], List, List).
@@ -109,8 +113,10 @@ split(List, [Pref|T]):-my_append(Pref, Suff, List), Pref \= [], split(Suff, T).
 
 
 
-
-
+p1([], L, F, [F]):-L=F.
+p1(E, L, F, [L|R]):-my_member([L, T], E), remove([L, T], E, E1), p1(E1, T, F, R), not(my_member(L, R)).
+p([[_,_]]).
+p([[L, R]|T]):-p1(T, R, L, _).
 
 
 

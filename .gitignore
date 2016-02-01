@@ -1,3 +1,7 @@
 Prolog/.project
 Sistemno/a.out
 Sistemno/file.txt
+*.swp
+Ruby/log4ruby/refresher.sh
+*.gem
+Ruby/log4ruby/UntitledDocument
