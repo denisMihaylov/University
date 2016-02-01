@@ -1,7 +1,3 @@
-module Log4ruby
-
-end
-
-class Log4ruby::Logger
-
-end
+require 'log4ruby/version'
+require 'log4ruby/logger'
+require 'log4ruby/logger_provider'
