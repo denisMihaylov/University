@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
                     'lib/log4ruby.rb', 
                     'lib/log4ruby/version.rb',
                     'lib/log4ruby/logger.rb',
+                    'lib/log4ruby/handler.rb',
                     'lib/log4ruby/logger_provider.rb',
                     'lib/log4ruby/logger/console_logger.rb',
                   ]
