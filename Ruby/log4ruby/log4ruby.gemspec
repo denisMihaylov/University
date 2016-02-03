@@ -8,14 +8,17 @@ Gem::Specification.new do |s|
   s.authors     = ['Denis Mihaylov']
   s.email       = 'denis.mihaylov93@gmail.com'
   s.files       = [
-                    'lib/log4ruby.rb', 
-                    'lib/log4ruby/version.rb',
-                    'lib/log4ruby/logger.rb',
-                    'lib/log4ruby/handler.rb',
-                    'lib/log4ruby/logger_provider.rb',
-                    'lib/log4ruby/logger/console_logger.rb',
-                    'lib/log4ruby/store.rb',
-                  ]
+    'lib/log4ruby.rb', 
+    'lib/log4ruby/version.rb',
+    'lib/log4ruby/logger.rb',
+    'lib/log4ruby/handler.rb',
+    'lib/log4ruby/logger_provider.rb',
+    'lib/log4ruby/logger/console_logger.rb',
+    'lib/log4ruby/store.rb',
+    'lib/log4ruby/constants.rb',
+    'lib/log4ruby/message.rb',
+    
+  ]
   s.homepage    =
     'http://rubygems.org/gems/hola'
   s.license       = 'MIT'
