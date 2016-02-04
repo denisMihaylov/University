@@ -7,8 +7,5 @@ require 'log4ruby/handler'
 require 'log4ruby/logger_provider'
 
 Thread.new do
-  handler = Log4Ruby::Handler.new
-  loop do
-    handler.log_message
-  end
+  Log4Ruby::Handler.start_logging
 end

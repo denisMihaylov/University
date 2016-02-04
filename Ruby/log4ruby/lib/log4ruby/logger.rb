@@ -9,7 +9,6 @@ module Log4Ruby
     LEVELS[1..-2].each do |level|
       define_method(level) do |message, exception = nil|
         if logging_allowed?(level)
-          puts level
           log(level, message, exception)
         end
       end

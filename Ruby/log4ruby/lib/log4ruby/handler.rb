@@ -1,9 +1,11 @@
 module Log4Ruby
   class Handler
 
-    def log_message
-      message = Store.instance.pop
-      puts message.to_s
+    def self.start_logging
+      loop do
+        message = Store.instance.pop
+        HANDLERS[message.type].log_message(message)
+      end
     end
 
   end
