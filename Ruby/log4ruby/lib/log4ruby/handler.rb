@@ -1,11 +1,21 @@
+module Log4Ruby
+  class Handler
 
-class Log4Ruby::Handler
-  def initialize
-    
+    def log_message
+      message = Store.instance.pop
+      puts message.to_s
+    end
+
   end
+end
 
-  def log_message
-    
+require_relative 'handler/console_handler'
+
+module Log4Ruby
+  class Handler
+    HANDLERS = {
+      console: ConsoleHandler.new,
+
+    }
   end
-
 end

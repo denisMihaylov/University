@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
     'lib/log4ruby/store.rb',
     'lib/log4ruby/constants.rb',
     'lib/log4ruby/message.rb',
-    
+    'lib/log4ruby/handler/console_handler.rb',
   ]
   s.homepage    =
     'http://rubygems.org/gems/hola'

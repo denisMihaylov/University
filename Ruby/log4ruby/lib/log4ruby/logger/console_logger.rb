@@ -1,11 +1,11 @@
 module Log4Ruby
-
   class ConsoleLogger < Logger
     
-    def log
-      
+    private 
+
+    def log(level, message, exception)
+      Store.instance.push(LogMessage.new(level, message, :console, exception))
     end
 
   end
-
 end

@@ -4,8 +4,8 @@ module Log4Ruby
 
   class << self
 
-    def get_console_logger
-      ConsoleLogger.new
+    def console_logger(level = :info)
+      ConsoleLogger.new(level)
     end
 
   end

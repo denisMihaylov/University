@@ -1,14 +1,14 @@
 module Log4Ruby
   class LogMessage
-  #attr_accessor :level, :time, :message
 
-  def initialize(level, message, type = :file)
-    @time, @level, @message = Time.now, level, message
+    def initialize(level, message, type = :file, exception)
+      @time, @level, @message, @exception = Time.now, level, message, exception
+    end
+
+    def to_s
+      level = @level.to_s.upcase
+      "#{level}|#@time|#@message"
+    end
+
   end
-
-  def to_s
-    level = @level.to_s.capitalize
-    "#{level}|#@time|#@message"
-  end
-
 end
