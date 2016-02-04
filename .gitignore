@@ -3,5 +3,6 @@ Sistemno/a.out
 Sistemno/file.txt
 *.swp
 Ruby/log4ruby/refresher.sh
+Ruby/log4ruby/test.rb
 *.gem
 Ruby/log4ruby/UntitledDocument
