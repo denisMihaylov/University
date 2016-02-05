@@ -12,12 +12,13 @@ module Log4Ruby
 end
 
 require_relative 'handler/console_handler'
+require_relative 'handler/file_handler'
 
 module Log4Ruby
   class Handler
     HANDLERS = {
       console: ConsoleHandler.new,
-
+      file: FileHandler.new,
     }
   end
 end
