@@ -1,7 +1,18 @@
-emails:
-  admin:    someadmin@somewhere.net
-  support:  support@somewhere.net
+#All settings can be defined for every type of logger
+#including file, console.
+#Only default formatters are defined.
 
-urls:
-  search:   http://google.com
-  blog:     http://speakmy.name
+#Time formatters
+time_formatters:
+  default:    '%Y-%m-%d %H:%M:%S'
+
+#Log message formatters
+#The defined array is the order in which the the message
+#components are displayed
+message_formatters:
+  default:
+    order:
+      - :level
+      - :date
+      - :message
+    delimeter: "|"
