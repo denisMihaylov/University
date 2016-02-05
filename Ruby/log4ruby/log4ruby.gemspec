@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
     'lib/log4ruby/handler/console_handler.rb',
     'lib/log4ruby/handler/file_handler.rb',
     'lib/log4ruby/logger/file_logger.rb',
+    'lib/log4ruby/config.rb',
+    'lib/log4ruby/default_config.yaml',
   ]
   s.homepage    =
     'http://rubygems.org/gems/hola'
