@@ -15,4 +15,4 @@ message_formatters:
       - :level
       - :date
       - :message
-    delimeter: "|"
+    delimiter: "|"
