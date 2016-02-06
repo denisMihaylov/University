@@ -18,8 +18,19 @@ module Log4Ruby
         @@handlers = {
           console: ConsoleHandler.new,
           file: FileHandler.new,
-          sqlite3: DBHandler.new(:sqlite),
         }
+      end
+
+      def register(logger_type, hanlder)
+        @@hanlders[logger_type] = handler
+      end
+
+      def handlers
+        @@handlers
+      end
+
+      def deregister(logger_type)
+        @handlers.delete(logger_type)
       end
 
     end
