@@ -11,8 +11,16 @@ time_formatters:
 #components are displayed
 message_formatters:
   default:
-    order:
+    parts:
       - :level
-      - :date
+      - :time
       - :message
-    delimiter: "|"
+      - :exception
+    delimiter: '|'
+  console:
+    parts:
+      - :message
+      - :exception
+      - :time
+      - :level
+    delimiter: '#'
