@@ -22,7 +22,15 @@ module Log4Ruby
       end
 
       def register(logger_type, hanlder)
+        if @@handlers[logger_type]
+          raise HandlerRegistryError, "Handler for '#{logger_type}' already "\
+            "registered. Use Log4Ruby::HandlerRegistry#update_handler instead."
+        end
         @@hanlders[logger_type] = handler
+      end
+
+      def update_handler(logger_type, handler)
+        @@handlers[logger_type] = handler
       end
 
       def handlers
