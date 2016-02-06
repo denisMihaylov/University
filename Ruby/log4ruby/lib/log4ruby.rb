@@ -6,7 +6,8 @@ require 'log4ruby/logger'
 require 'log4ruby/store'
 require 'log4ruby/handler'
 require 'log4ruby/logger_provider'
+require 'log4ruby/handler_registry'
 
 Thread.new do
-  Log4Ruby::Handler.start_logging
+  Log4Ruby::HandlerRegistry.start_logging
 end
