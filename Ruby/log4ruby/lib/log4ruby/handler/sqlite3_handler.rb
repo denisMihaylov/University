@@ -5,14 +5,24 @@ module Log4Ruby
 
     def initialize
       @type, @queue = :sqlite3, []
+      create_table
+    end
+
+    def create_table
+      db = SQLite3::Database.open(Config.db[@type][:db_name])
+      db.execute(create_table_statement)
+    rescue SQLite3::Exception => e
+      p e.backtrace.take(5)
+      p e
+    ensure
+      db.close if db
     end
 
     def persist_messages
-      db = SQLite3::Database.open(Config.db[@type][:db_path])
-      db.execute(create_table_statement)
+      db = SQLite3::Database.open(Config.db[@type][:db_name])
       db.execute(insert_statement)
       @queue = []
-    rescue => e
+    rescue SQLite3::Exception => e
       p e.backtrace.take(5)
       p e
     ensure

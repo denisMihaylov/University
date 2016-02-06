@@ -33,10 +33,16 @@ exception_formatters:
     
 db:
   default:
-    db_path: 'log_database.db'
+    db_name: 'log_database.db'
     table_name: 'Log'
     threshold: 5
   sqlite3:
-    db_path: 'sqlite_test.db'
+    db_name: 'sqlite_test.db'
     table_name: 'Log'
-    threshold: 1
+    threshold: 5
+  postgresql:
+    db_name: 'postgres_testdb'
+    user: 'postgres_user'
+    password: 'password1'
+    table_name: 'Log'
+    threshold: 5
