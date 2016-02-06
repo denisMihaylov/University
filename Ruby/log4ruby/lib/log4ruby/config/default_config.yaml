@@ -26,7 +26,7 @@ message_formatters:
     delimiter: '#'
 
 exception_formatters:
-  defualt:
+  default:
     backtrace_depth: 5
     
 db:

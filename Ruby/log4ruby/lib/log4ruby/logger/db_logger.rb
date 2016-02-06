@@ -1,11 +1,11 @@
 module Log4Ruby
-  class DBLogger
+  class DBLogger < Logger
     #By the db_type when logging messages the corresponding
     #handler will be invoked
     attr_reader :db_type
 
-    def initialize(db_type)
-      @db_type = db_type
+    def initialize(db_type, level)
+      @db_type, @level = db_type, level
     end
 
     def log(level, message, exception)

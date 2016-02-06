@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
     'lib/log4ruby/handler/console_handler.rb',
     'lib/log4ruby/handler/file_handler.rb',
     'lib/log4ruby/handler/db_handler.rb',
+    'lib/log4ruby/handler/sqlite3_handler.rb',
   ] + Dir['lib/log4ruby/config/*']
   s.homepage    =
     'http://rubygems.org/gems/hola'
