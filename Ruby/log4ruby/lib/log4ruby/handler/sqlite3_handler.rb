@@ -3,9 +3,6 @@ require 'sqlite3'
 module Log4Ruby
   class SQLite3Handler < DBHandler
 
-    STATEMENT = "INSERT INTO #{Config.db[@type][:table_name]} (%s) %s"
-    FIRST_SELECT = "%s AS %s"
-
     def initialize
       @type, @queue = :sqlite3, []
     end
@@ -13,34 +10,31 @@ module Log4Ruby
     def persist_messages
       db = SQLite3::Database.open(Config.db[@type][:db_path])
       db.execute(create_table_statement)
-      db.execute(statement)
+      db.execute(insert_statement)
       @queue = []
     rescue => e
-      puts e
+      p e.backtrace.take(5)
+      p e
     ensure
       db.close if db
     end
 
-    def statement
-      columns = Config.message_formatters[@type][:parts]
-      STATEMENT % [columns.map(&:to_s).join(", "), select_statements(columns)]
+    def insert_statement
+      parts = [table_name, map_internal(get_columns, &:to_s), select_statements]
+      INSERT_STATEMENT % parts
     end
 
-    def select_statements(columns)
+    def select_statements
       message = @queue.shift
-      first_select = columns.map do |column|
-        FIRST_SELECT % ["'" + message.send(column).to_s + "'" || "'NIL'", column]
-      end.join(", ")
-      first_statement = "SELECT %s" % first_select
-      other_statements = @queue.map do |message|
-        "SELECT " + columns.map {|column| "'" + message.send(column).to_s + "'"||"'NILL'"}.join(", ")
+      columns = get_columns
+      first_message = map_internal(columns) do |column|
+        VALUE_COLUMN_PAIR % [quote(message.send(column)), column]
       end
-      other_statements.insert(0, first_statement).join(" UNION ALL ")
-    end
-
-    def create_table_statement
-      "CREATE TABLE IF NOT EXISTS #{Config.db[@type][:table_name]} (" +
-      Config.message_formatters[@type][:parts].join(", ") + ")"
+      first_message = "SELECT %s" % first_message
+      other_messages = @queue.map do |message|
+        "SELECT #{map_internal(columns) {|column| quote(message.send(column))}}"
+      end
+      other_messages.insert(0, first_message).join(" UNION ALL ".freeze)
     end
 
   end
