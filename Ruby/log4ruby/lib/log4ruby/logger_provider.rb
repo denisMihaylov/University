@@ -7,22 +7,22 @@ module Log4Ruby
 
   class << self
 
-    def console_logger(level = :info)
+    def console_logger(id, level = :info)
       ConsoleLogger.new(level)
     end
 
-    def file_logger(level = :info)
-      FileLogger.new(level)
+    def file_logger(id, level = :info)
+      FileLogger.new(id, level)
     end
 
-    def db_logger(db_type, level = :info)
-      DBLogger.new(db_type, level)
+    def db_logger(db_type, id, level = :info)
+      DBLogger.new(id, db_type, level)
     end
 
-    def sqlite3_logger
+    def sqlite3_logger(id, level = :info)
       require_relative 'handler/sqlite3_handler'
       HandlerRegistry.register(:sqlite3, SQLite3Handler.new) 
-      db_logger(:sqlite3)
+      db_logger(:sqlite3, id, level)
     end
 
   end
