@@ -18,6 +18,7 @@ module Log4Ruby
         @@handlers = {
           console: ConsoleHandler.new,
           file: FileHandler.new,
+          sqlite3: DBHandler.new(:sqlite),
         }
       end
 

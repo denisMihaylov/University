@@ -13,6 +13,14 @@ module Log4Ruby
       FileLogger.new(level)
     end
 
+    def db_logger(db_type)
+      DBLogger.new(db_type)
+    end
+
+    def sqlite3_logger
+      db_logger(:sqlite3)
+    end
+
   end
 
 end
