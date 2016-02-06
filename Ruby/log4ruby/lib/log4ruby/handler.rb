@@ -3,12 +3,17 @@ module Log4Ruby
 
     private
 
-    def parse_message(message, logger_type)
-      message.time = message.time.strftime(Config.time_formatters[logger_type])
-      formatter = Config.message_formatters[logger_type]
+    def parse_message(message)
+      format_message(message)
+      formatter = Config.message_formatters[@type]
       formatter[:parts].map do |log_part|
         message.send(log_part)
       end.compact.join(formatter[:delimiter])
+    end
+
+    def format_message(message)
+      message.time = message.time.strftime(Config.time_formatters[@type])
+      message
     end
 
   end

@@ -3,13 +3,13 @@ module Log4Ruby
     attr_accessor :rolling
 
     def initialize(rolling = true)
-      @rolling = rolling
+      @rolling, @type = rolling, :file
       Dir.mkdir('log') unless Dir.exists?('log')
     end
 
     def log_message(message)
       File.open('log/log_trace.log', 'a+') do |file|
-        file.puts(parse_message(message, :file))
+        file.puts(parse_message(message))
       end
     end
 
