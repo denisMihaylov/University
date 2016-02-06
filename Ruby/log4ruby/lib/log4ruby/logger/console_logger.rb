@@ -4,7 +4,8 @@ module Log4Ruby
     private 
 
     def log(level, message, exception)
-      Store.instance.push(LogMessage.new(level, message, :console, exception))
+      message = LogMessage.new(@id, level, message, :console, exception)
+      Store.instance.push(message)
     end
 
   end

@@ -1,8 +1,9 @@
 module Log4Ruby
   class Logger
-    attr_accessor :level
+    attr_accessor :level, :id
 
-    def initialize(level)
+    def initialize(id, level)
+      @id = id
       @level = level
     end
 

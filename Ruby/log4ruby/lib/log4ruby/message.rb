@@ -1,10 +1,11 @@
 module Log4Ruby
   class LogMessage
-    attr_accessor :time, :type, :message, :level, :exception
+    attr_accessor :logger_id, :time, :type, 
+      :message, :level, :exception, :backtrace
 
-    def initialize(level, message, type = :file, exception)
+    def initialize(logger_id, level, message, type = :file, exception)
       @type, @level, @message = type, level.upcase, message
-      @time = Time.now
+      @logger_id, @time = logger_id, Time.now
       if exception
         @exception = exception
       end
