@@ -31,6 +31,12 @@ module Log4Ruby
       db_logger(:postgresql, id, level)
     end
 
+    def mysql_logger(id, level = :info)
+      require_relative 'handler/mysql_handler'
+      HandlerRegistry.register(:mysql, MysqlHandler.new)
+      db_logger(:mysql, id, level)
+    end
+
   end
 
 end

@@ -54,3 +54,13 @@ db:
       time: 'TIMESTAMP WITH TIME ZONE'
       text: 'VARCHAR(256)'
       primary_key: 'BIGSERIAL PRIMARY KEY'
+  mysql:
+    db_name: 'mysql_testdb'
+    table_name: 'LOGS'
+    user: 'mysql_user'
+    password: '34klq*'
+    threshold: 6
+    types:
+      time: 'TIMESTAMP'
+      text: 'VARCHAR(256)'
+      primary_key: 'INT PRIMARY KEY AUTO_INCREMENT'

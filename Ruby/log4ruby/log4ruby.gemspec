@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     'lib/log4ruby/handler/db_handler.rb',
     'lib/log4ruby/handler/sqlite3_handler.rb',
     'lib/log4ruby/handler/postgresql_handler.rb',
+    'lib/log4ruby/handler/mysql_handler.rb',
     'lib/log4ruby/util/sql_utils.rb',
   ] + Dir['lib/log4ruby/config/*']
   s.homepage    =
