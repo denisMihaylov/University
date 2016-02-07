@@ -40,9 +40,17 @@ db:
     db_name: 'sqlite_test.db'
     table_name: 'Log'
     threshold: 5
+    types:
+      time: 'DATETIME'
+      text: 'TEXT'
+      primary_key: 'INTEGER PRIMARY KEY'
   postgresql:
     db_name: 'postgres_testdb'
     user: 'postgres_user'
     password: 'password1'
     table_name: 'Log'
     threshold: 5
+    types:
+      time: 'TIMESTAMP WITH TIME ZONE'
+      text: 'VARCHAR(256)'
+      primary_key: 'BIGSERIAL PRIMARY KEY'

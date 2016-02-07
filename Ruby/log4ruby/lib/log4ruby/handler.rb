@@ -13,7 +13,6 @@ module Log4Ruby
 
     def format_message(message)
       message.time = message.time.strftime(Config.time_formatters[@type])
-      message
     end
 
   end

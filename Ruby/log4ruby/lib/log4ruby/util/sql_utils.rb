@@ -9,10 +9,14 @@ module Log4Ruby
 
     #CTEATE table statement
     CREATE_STATEMENT = "CREATE TABLE IF NOT EXISTS %s 
-      (Id INTEGER PRIMARY KEY, %s)"
+      (Id %s, %s)"
 
     def quote(value)
-      value.nil? || value.empty? ? 'NULL'.freeze : "'%s'".freeze % value.to_s
+      if value.nil? || value.to_s.empty?
+        'NULL'.freeze
+      else
+        "'%s'".freeze % value.to_s
+      end
     end
 
     def table_name
@@ -31,19 +35,35 @@ module Log4Ruby
       columns_part = get_columns.map do |column|
         "%s %s" % [column.to_s, column_to_type(column)]
       end
-      CREATE_STATEMENT % [table_name, concat(columns_part)]
+      CREATE_STATEMENT % [table_name, primary_key_type, concat(columns_part)]
     end
 
     def column_to_type(column)
       if (column === :time || column == :date)
-        'DATETIME'.freeze
+        Config.db[@type][:types][:time]
       else
-        'TEXT'.freeze
+        Config.db[@type][:types][:text]
       end
     end
 
     def map_internal(parts)
       concat(parts.map {|part| yield part})
+    end
+
+    def db_name
+      Config.db[@type][:db_name]
+    end
+
+    def user
+      Config.db[@type][:user]
+    end
+
+    def password
+      Config.db[@type][:password]
+    end
+
+    def primary_key_type
+      Config.db[@type][:types][:primary_key]
     end
 
   end

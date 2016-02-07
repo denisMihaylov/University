@@ -7,7 +7,6 @@ module Log4Ruby
     class << self
 
       def start_logging
-        init_handlers
         loop do
           message = Store.instance.pop
           @@handlers[message.type].log_message(message)

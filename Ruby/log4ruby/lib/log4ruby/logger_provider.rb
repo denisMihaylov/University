@@ -25,6 +25,12 @@ module Log4Ruby
       db_logger(:sqlite3, id, level)
     end
 
+    def postgresql_logger(id, level = :info)
+      require_relative 'handler/postgresql_handler'
+      HandlerRegistry.register(:postgresql, PostgreSQLHandler.new)
+      db_logger(:postgresql, id, level)
+    end
+
   end
 
 end

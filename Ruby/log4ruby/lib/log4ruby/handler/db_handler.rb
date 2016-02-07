@@ -5,7 +5,7 @@ module Log4Ruby
     include SQLUtils
 
     def log_message(message)
-      @queue << format_message(message)
+      @queue << message
       if (@queue.size >= Config.db[@type][:threshold])
         persist_messages
       end
