@@ -26,6 +26,16 @@ message_formatters:
       - :time
       - :level
     delimiter: '#'
+  syslog:
+    parts:
+      - :message
+      - :exception
+    delimiter: '->'
+  remote:
+    parts:
+      - :message
+      - :exception
+    delimiter: '->'
 
 exception_formatters:
   default:
@@ -64,3 +74,7 @@ db:
       time: 'TIMESTAMP'
       text: 'VARCHAR(256)'
       primary_key: 'INT PRIMARY KEY AUTO_INCREMENT'
+
+syslog:
+  remote_host: '192.168.0.105'
+  facility: 'local0'

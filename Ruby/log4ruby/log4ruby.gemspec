@@ -22,12 +22,16 @@ Gem::Specification.new do |s|
     'lib/log4ruby/logger/console_logger.rb',
     'lib/log4ruby/logger/file_logger.rb',
     'lib/log4ruby/logger/db_logger.rb',
+    'lib/log4ruby/logger/syslog_logger.rb',
     'lib/log4ruby/handler/console_handler.rb',
     'lib/log4ruby/handler/file_handler.rb',
     'lib/log4ruby/handler/db_handler.rb',
     'lib/log4ruby/handler/sqlite3_handler.rb',
     'lib/log4ruby/handler/postgresql_handler.rb',
     'lib/log4ruby/handler/mysql_handler.rb',
+    'lib/log4ruby/handler/remote_syslog_handler.rb',
+    'lib/log4ruby/handler/syslog_handler.rb',
+    'lib/log4ruby/handler/system_loggable.rb',
     'lib/log4ruby/util/sql_utils.rb',
   ] + Dir['lib/log4ruby/config/*']
   s.homepage    =

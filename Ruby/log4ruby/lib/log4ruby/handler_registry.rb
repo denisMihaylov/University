@@ -1,5 +1,7 @@
 require_relative 'handler/console_handler'
 require_relative 'handler/file_handler'
+require_relative 'handler/syslog_handler'
+require_relative 'handler/remote_syslog_handler'
 
 module Log4Ruby
   class HandlerRegistry
@@ -17,6 +19,8 @@ module Log4Ruby
         @@handlers = {
           console: ConsoleHandler.new,
           file: FileHandler.new,
+          syslog: SyslogHandler.new,
+          remote: RemoteSyslogHandler.new,
         }
       end
 
