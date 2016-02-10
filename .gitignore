@@ -1,8 +1,8 @@
-Prolog/.project
-Sistemno/a.out
-Sistemno/file.txt
+prolog/.project
+sistemno/a.out
+sistemno/file.txt
 *.swp
-Ruby/log4ruby/refresher.sh
-Ruby/log_test
+ruby/log4ruby/refresher.sh
+ruby/log_test
 *.gem
-Ruby/log4ruby/UntitledDocument
+ruby/log4ruby/UntitledDocument
