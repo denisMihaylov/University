@@ -2,11 +2,9 @@ require 'sqlite3'
 
 module Log4Ruby
   class SQLite3Handler < DBHandler
-    #INSERT multiple records into the database
-    INSERT_STATEMENT = "INSERT INTO %s (%s) %s"
 
     def initialize
-      @type, @queue = :sqlite3, []
+      @type = :sqlite3
       create_table
     end
 
@@ -22,33 +20,14 @@ module Log4Ruby
       db.close if db
     end
 
-    def persist_messages
+    def persist_message(message)
       db = SQLite3::Database.open(db_name)
-      db.execute(insert_statement)
-      @queue = []
+      db.execute(insert_statement(message))
     rescue SQLite3::Exception => e
       p e.backtrace.take(5)
       p e
     ensure
       db.close if db
-    end
-
-    def insert_statement
-      parts = [table_name, map_internal(get_columns, &:to_s), select_statements]
-      INSERT_STATEMENT % parts
-    end 
-
-    def select_statements
-      message = @queue.shift
-      columns = get_columns
-      first_message = map_internal(columns) do |column|
-        VALUE_COLUMN_PAIR % [quote(message.send(column)), column]
-      end 
-      first_message = "SELECT %s" % first_message
-      other_messages = @queue.map do |message|
-        "SELECT #{map_internal(columns) {|column| quote(message.send(column))}}"
-      end 
-      other_messages.insert(0, first_message).join(" UNION ALL ".freeze)
     end
 
   end
