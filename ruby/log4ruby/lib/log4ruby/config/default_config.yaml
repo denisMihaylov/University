@@ -45,11 +45,9 @@ db:
   default:
     db_name: 'log_database.db'
     table_name: 'Log'
-    threshold: 5
   sqlite3:
     db_name: 'sqlite_test.db'
     table_name: 'Log'
-    threshold: 5
     types:
       time: 'DATETIME'
       text: 'TEXT'
@@ -59,7 +57,6 @@ db:
     user: 'postgres_user'
     password: 'password1'
     table_name: 'Log'
-    threshold: 5
     types:
       time: 'TIMESTAMP WITH TIME ZONE'
       text: 'VARCHAR(256)'
@@ -69,7 +66,6 @@ db:
     table_name: 'LOGS'
     user: 'mysql_user'
     password: '34klq*'
-    threshold: 6
     types:
       time: 'TIMESTAMP'
       text: 'VARCHAR(256)'
