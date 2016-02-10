@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Calculator</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+            <form action="ThreeParamsServlet" method="post">
+                First digit: <input type="number" name="digit1"><br/>
+                Second digit: <input type="number" name="digit2"><br/>
+                <input type="radio" name="math_func" value="sum" checked>Sum<br/>
+                <input type="radio" name="math_func" value="div">Divide<br/>
+                <input type="radio" name="math_func" value="sub">Substitute<br/>
+                <input type="radio" name="math_func" value="avg">Average<br/>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </body>
+</html>
