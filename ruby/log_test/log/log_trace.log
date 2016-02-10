@@ -1,5 +1,0 @@
-INFO|2016-02-06 18:58:24|message
-INFO|logger1|2016-02-06 19:00:43|message1
-INFO|logger1|2016-02-06 19:00:45|message2
-WARN|logger2|2016-02-06 19:01:05|WARNING
-INFO|file|2016-02-07 10:15:03|log1
