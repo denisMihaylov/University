@@ -5,6 +5,22 @@ module Log4Ruby
   class FileHandler < Handler
     attr_accessor :rolling
 
+    SIZE_UNIT_RATIO = {
+      byte: 1,
+      kbyte: 1024,
+      mbyte: 1024 ** 2,
+      gbyte: 1024 ** 3,
+    }
+
+    TIME_UNIT_RATIO = {
+      sec: 1,
+      min: 60,
+      hour: 60 * 60,
+      day: 24 * 60 * 60,
+      week: 7 * 24 * 60 * 60,
+      month: 30 * 7 * 24 * 60 * 60,
+    }
+
     def initialize()
       @rolling, @type = Config.file[:rolling], :file
       file_path = Config.file[:file_path]
@@ -73,11 +89,14 @@ module Log4Ruby
     end
 
     def time_limit?
-      Time.now - @file_stats[:created_on] > Config.file[:limits][:time]
+      ratio = TIME_UNIT_RATIO[Config.file[:limits][:time_unit]]
+      difference = (Time.now - @file_stats[:created_on]) / ratio
+      difference > Config.file[:limits][:time]
     end
 
     def size_limit?
-      File.stat(get_file_name).size > Config.file[:limits][:file_size]
+      ratio = SIZE_UNIT_RATIO[Config.file[:limits][:size_unit]]
+      File.stat(get_file_name).size / ratio > Config.file[:limits][:file_size]
     end
 
   end

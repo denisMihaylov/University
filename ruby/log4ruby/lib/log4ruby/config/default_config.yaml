@@ -84,5 +84,7 @@ file:
   rolling: true
   limits:
     message_count: 12
-    file_size: 124412341231
-    time: 15 #in seconds
+    file_size: 1244
+    size_unit: :byte #byte, kbyte, mbyte, gbyte
+    time: 15
+    time_unit: :sec #sec, min, hour, day, week, month
