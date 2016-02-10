@@ -78,3 +78,11 @@ db:
 syslog:
   remote_host: '192.168.0.105'
   facility: 'local0'
+
+file:
+  file_path: 'log'
+  rolling: true
+  limits:
+    message_count: 12
+    file_size: 124412341231
+    time: 15 #in seconds
