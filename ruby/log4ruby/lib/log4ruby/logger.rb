@@ -1,10 +1,11 @@
 module Log4Ruby
   class Logger
-    attr_accessor :level, :id
+    attr_accessor :level, :id, :handler
 
-    def initialize(id, level)
+    def initialize(id, level, handler)
       @id = id
       @level = level
+      @handler = handler
     end
 
     def logging_allowed?(level)
@@ -19,6 +20,13 @@ module Log4Ruby
         logging_allowed?(level)
       end 
     end
+
+    private
+
+    def log(level, message, exception)
+      message = LogMessage.new(@id, level, message, @handler, exception)
+      fork {HandlerRegistry.log_message(message)}
+    end 
 
   end
 end

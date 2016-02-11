@@ -1,20 +1,11 @@
-require 'log4ruby/version'
-require 'log4ruby/constants'
-require 'log4ruby/config'
-require 'log4ruby/error'
-require 'log4ruby/message'
-require 'log4ruby/logger'
-require 'log4ruby/store'
-require 'log4ruby/handler'
-require 'log4ruby/logger_provider'
-require 'log4ruby/handler_registry'
+require_relative 'log4ruby/version'
+require_relative 'log4ruby/constants'
+require_relative 'log4ruby/config'
+require_relative 'log4ruby/error'
+require_relative 'log4ruby/message'
+require_relative 'log4ruby/logger'
+require_relative 'log4ruby/handler'
+require_relative 'log4ruby/logger_provider'
+require_relative 'log4ruby/handler_registry'
 
 Log4Ruby::HandlerRegistry.init_handlers
-Thread.new do
-  begin
-  Log4Ruby::HandlerRegistry.start_logging
-  rescue => e
-    p e
-    p e.backtrace.take(5)
-  end
-end
