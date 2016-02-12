@@ -59,6 +59,10 @@ module Log4Ruby
         @@handlers.delete(logger_type)
       end
 
+      def handles?(logger_type)
+        not @@handlers[logger_type].nil?
+      end
+
       private
 
       def validate_handler(handler)
