@@ -27,6 +27,9 @@ describe Log4Ruby::Config do
       old_message_formatters = Log4Ruby::Config.message_formatters
       Log4Ruby::Config.update_from_yaml(YAML.dump(new_config))
       expect(Log4Ruby::Config.message_formatters[:test]).to eq 'result'
+      old_message_formatters.each do |key, value|
+        expect(Log4Ruby::Config.message_formatters[key]).to eq value
+      end
     end
 
     it "does not erase not changed configurations" do
