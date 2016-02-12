@@ -9,7 +9,7 @@ describe Log4Ruby::HandlerRegistry do
   shared_examples 'type_to_handler' do |type, handler_class|
     it "should register '#{type}' handler" do
       handler = registry.handlers[type]
-      expect(handler.kind_of?(handler_class)).to be true
+      expect(handler).to be_kind_of(handler_class)
     end
   end
 
@@ -37,13 +37,13 @@ describe Log4Ruby::HandlerRegistry do
     end
 
     it 'defines logger providing methods' do
-      expect(Log4Ruby.respond_to?(:new_type_logger)).to be true
+      expect(Log4Ruby).to respond_to(:new_type_logger)
       logger = Log4Ruby.new_type_logger("LOGGER ID")
       expect(logger.handler).to eq :new_type
 
-      expect(Log4Ruby.respond_to?(:new_logger_type)). to be false
+      expect(Log4Ruby).not_to respond_to(:new_logger_type)
       registry.register(:new_logger_type, new_handler)
-      expect(Log4Ruby.respond_to?(:new_logger_type)).to be true
+      expect(Log4Ruby).to respond_to(:new_logger_type)
     end
   end
 
