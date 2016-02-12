@@ -35,6 +35,16 @@ describe Log4Ruby::HandlerRegistry do
       registry.register(:new_type, new_handler)
       expect(registry.handlers.size).to eq old_handler_count
     end
+
+    it 'defines logger providing methods' do
+      expect(Log4Ruby.respond_to?(:new_type_logger)).to be true
+      logger = Log4Ruby.new_type_logger("LOGGER ID")
+      expect(logger.handler).to eq :new_type
+
+      expect(Log4Ruby.respond_to?(:new_logger_type)). to be false
+      registry.register(:new_logger_type, new_handler)
+      expect(Log4Ruby.respond_to?(:new_logger_type)).to be true
+    end
   end
 
   describe '#deregister' do
