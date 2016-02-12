@@ -20,7 +20,7 @@ module Log4Ruby
 
     def persist_message(message)
       con = connect_to_database
-      con.exec(insert_statement(message)
+      con.exec(insert_statement(message))
     rescue PG::Error => e
       p e
       p e.backtrace.take(5) if e.backtrace
