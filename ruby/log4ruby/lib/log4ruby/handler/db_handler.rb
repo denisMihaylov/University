@@ -1,4 +1,6 @@
 require_relative '../util/sql_utils'
+require_relative '../handler'
+require_relative '../config'
 
 module Log4Ruby
   class DBHandler < Handler

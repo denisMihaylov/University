@@ -1,5 +1,7 @@
 require 'fileutils'
 require 'yaml'
+require_relative '../handler'
+require_relative '../config'
 
 module Log4Ruby
   class FileHandler < Handler

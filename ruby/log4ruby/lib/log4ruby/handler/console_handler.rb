@@ -1,3 +1,5 @@
+require_relative '../handler'
+
 module Log4Ruby
   class ConsoleHandler < Handler
 

@@ -1,4 +1,6 @@
 require_relative 'constants'
+require_relative 'handler_registry'
+require_relative 'message'
 
 module Log4Ruby
   class Logger

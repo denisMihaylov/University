@@ -1,4 +1,5 @@
 require 'sqlite3'
+require_relative 'db_handler'
 
 module Log4Ruby
   class SQLite3Handler < DBHandler

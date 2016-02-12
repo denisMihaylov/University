@@ -1,3 +1,5 @@
+require_relative '../config'
+
 module Log4Ruby
   #Simple sql util methods that can be mixed into DBHandlers
   module SQLUtils

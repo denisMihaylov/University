@@ -1,4 +1,5 @@
 require_relative 'system_loggable.rb'
+require_relative '../handler'
 
 module Log4Ruby
   class SyslogHandler < Handler

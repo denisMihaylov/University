@@ -1,4 +1,6 @@
 require_relative 'system_loggable.rb'
+require_relative '../handler'
+require_relative '../config'
 
 module Log4Ruby
   class RemoteSyslogHandler < Handler

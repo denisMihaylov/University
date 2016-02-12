@@ -1,4 +1,5 @@
 require 'mysql'
+require_relative 'db_handler'
 
 module Log4Ruby
   class MysqlHandler < DBHandler
