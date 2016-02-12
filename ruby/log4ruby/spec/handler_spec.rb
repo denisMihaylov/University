@@ -83,5 +83,4 @@ describe Log4Ruby::HandlerRegistry do
       end.to raise_error(error)
     end
   end
-
 end
