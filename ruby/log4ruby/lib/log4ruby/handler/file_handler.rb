@@ -48,7 +48,7 @@ module Log4Ruby
     def log_message(message)
       file_name = get_file_name
       File.open(file_name, 'a+') do |file|
-        file.puts(parse_message(message))
+        file.puts(message.parse)
       end
       perform_post_log_actions(file_name)
     end

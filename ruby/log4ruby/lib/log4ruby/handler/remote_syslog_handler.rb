@@ -12,7 +12,7 @@ module Log4Ruby
       level = get_level(message.level)
       parts = [Config.syslog[:remote_host], message.logger_id.to_s, level]
       facility = "-n %s.%s -p %s" % parts
-      message = parse_message(message)
+      message = message.parse
       call_bash_logging(facility, message)
     end
 

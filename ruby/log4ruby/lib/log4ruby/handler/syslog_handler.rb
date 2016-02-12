@@ -11,8 +11,7 @@ module Log4Ruby
     def log_message(message)
       level = get_level(message.level)
       facility = "-p %s.%s" % [message.logger_id.to_s, level]
-      message = parse_message(message)  
-      call_bash_logging(facility, message)
+      call_bash_logging(facility, message.parse)
     end
 
   end
