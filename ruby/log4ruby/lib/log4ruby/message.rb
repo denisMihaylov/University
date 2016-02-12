@@ -2,8 +2,8 @@ require_relative 'config'
 
 module Log4Ruby
   class LogMessage
-    attr_accessor :message, :level
-    attr_reader :time, :exception, :logger_id, :type, :backtrace
+    attr_accessor :message, :level, :type
+    attr_reader :exception, :logger_id, :backtrace
 
     def initialize
       @time = Time.now
@@ -11,7 +11,6 @@ module Log4Ruby
     end
 
     def parse
-      @time = @time.strftime(Config.time_formatters[@type])
       formatter = Config.message_formatters[@type]
       formatter[:parts].map do |log_part|
         send(log_part)
@@ -24,6 +23,14 @@ module Log4Ruby
         depth = Config.message_formatters[@type][:backtrace_depth]
         @backtrace = exception.backtrace.take(depth)
       end
+    end
+
+    def time_date
+      @time
+    end
+
+    def time
+      @time.strftime(Config.time_formatters[@type])
     end
 
   end
