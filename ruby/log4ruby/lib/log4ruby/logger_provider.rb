@@ -1,4 +1,6 @@
 require_relative 'handler/db_handler'
+require_relative 'handler_registry'
+require_relative 'logger'
 
 module Log4Ruby
 
