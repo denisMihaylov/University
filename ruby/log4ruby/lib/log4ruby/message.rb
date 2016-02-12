@@ -29,6 +29,10 @@ module Log4Ruby
       @time
     end
 
+    def level
+      @level.to_s.upcase
+    end
+
     def time
       @time.strftime(Config.time_formatters[@type])
     end

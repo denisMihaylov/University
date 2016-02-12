@@ -19,7 +19,7 @@ describe Log4Ruby::LogMessage do
   describe "#initialize" do
     it "creates a new LogMessage" do
       expect(@message.logger_id).to eq "logger_id"
-      expect(@message.level).to eq :info
+      expect(@message.level).to eq "INFO"
       expect(@message.message).to eq "message"
       expect(@message.type).to eq :console
       expect(@message.exception).to eq Exception.new
