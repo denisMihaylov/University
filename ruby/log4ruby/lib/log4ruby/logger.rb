@@ -10,10 +10,6 @@ module Log4Ruby
       @handler = handler
     end
 
-    def logging_allowed?(level)
-      LEVELS.index(level) <= LEVELS.index(@level)
-    end
-
     LEVELS[1..-2].each do |level|
       define_method(level) do |message, exception = nil|
         log(level, message, exception) if logging_allowed?(level)
@@ -32,10 +28,14 @@ module Log4Ruby
         @level = level
         @message = message
         @type = handler
-        self.exception = exception
+        self.exception = exception if exception
       end
       fork {HandlerRegistry.log_message(message)}
     end 
+
+    def logging_allowed?(level)
+      LEVELS.index(level) <= LEVELS.index(@level)
+    end
 
   end
 end
