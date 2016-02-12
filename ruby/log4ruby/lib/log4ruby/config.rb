@@ -16,7 +16,7 @@ module Log4Ruby
       config_path = File.join(CONFIG_PATH, 'default_config.yaml')
       update(File.expand_path(config_path))
       @settings.each do |method_name, value|
-        define_method(method_name) { value }
+        define_method(method_name) {@settings[method_name.to_sym]}
       end
     end
 
