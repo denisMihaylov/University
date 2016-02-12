@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
     'lib/log4ruby/message.rb',
     'lib/log4ruby/config.rb',
     'lib/log4ruby/error.rb',
+    'lib/log4ruby/message_miner.rb',
     'lib/log4ruby/handler_registry.rb',
     'lib/log4ruby/handler/console_handler.rb',
     'lib/log4ruby/handler/file_handler.rb',
