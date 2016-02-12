@@ -8,6 +8,8 @@ module Log4Ruby
     extend self
     attr_accessor :settings
 
+    CONFIG_PATH = File.join(File.dirname(__FILE__), 'config')
+
     @settings = {}
 
     def set_up
@@ -21,6 +23,10 @@ module Log4Ruby
     def update(file_path)
       config_data = YAML::load_file(file_path)
       deep_merge(config_data)
+    end
+
+    def update_from_yaml(yaml)
+      deep_merge(YAML.load(yaml))
     end
 
     def method_missing(name, *args, &block)
@@ -50,7 +56,7 @@ module Log4Ruby
 
     def add_defaults(hash)
       hash.each do |key, value|
-        value.default = value.fetch(:default, nil)
+        value.default = value[:default] if (value.respond_to?(:default))
       end
     end
 

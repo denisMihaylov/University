@@ -52,7 +52,8 @@ module Log4Ruby
 
       def define_logger_provider_method(logger_type)
         Log4Ruby.class_eval do
-          define_method(get_method_name(logger_type)) do |id, level = :info|
+          method_name = get_method_name(logger_type)
+          define_singleton_method(method_name) do |id, level = :info|
             Logger.new(id, level, logger_type)
           end
         end
