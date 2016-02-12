@@ -1,3 +1,5 @@
+require_relative 'constants'
+
 module Log4Ruby
   class Logger
     attr_accessor :level, :id, :handler
@@ -24,7 +26,14 @@ module Log4Ruby
     private
 
     def log(level, message, exception)
-      message = LogMessage.new(@id, level, message, @handler, exception)
+      id, handler = @id, @handler
+      message = LogMessage.new do
+        @logger_id = id
+        @level = level
+        @message = message
+        @type = handler
+        self.exception = exception
+      end
       fork {HandlerRegistry.log_message(message)}
     end 
 

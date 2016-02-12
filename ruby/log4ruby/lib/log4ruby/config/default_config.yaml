@@ -18,6 +18,7 @@ message_formatters:
       - :message
       - :exception
     delimiter: '|'
+    backtrace_depth: 5
   console:
     parts:
       - :message
@@ -26,6 +27,7 @@ message_formatters:
       - :time
       - :level
     delimiter: '#'
+    backtrace_depth: 2
   syslog:
     parts:
       - :message
@@ -36,11 +38,7 @@ message_formatters:
       - :message
       - :exception
     delimiter: '->'
-
-exception_formatters:
-  default:
-    backtrace_depth: 5
-    
+ 
 db:
   default:
     db_name: 'log_database.db'
