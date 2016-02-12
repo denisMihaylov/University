@@ -32,7 +32,7 @@ module Log4Ruby
         @type = handler
         self.exception = exception if exception
       end
-      fork {HandlerRegistry.log_message(message)}
+      HandlerRegistry.log_message(message)
     end 
 
     def logging_allowed?(level)
