@@ -125,29 +125,90 @@ describe Log4Ruby::Handler do
   end
 
   shared_examples 'db_handlers' do |type|
-    it 'is registered when a logger is created' do
+    it 'is not registered initially' do
       expect(@registry.handlers[type]).to be nil
       Log4Ruby.send("#{type}_logger", "LOGGER_ID")
     end
   end
 
   context Log4Ruby::SQLite3Handler do
-    before(:each) do
-      @message.type = :sqlite3
-      @handler = @registry.handlers[:sqlite3]
-      @count_rows = lambda do
-        db = SQLite3::Database.open(@handler.db_name)
-        db.get_first_value("SELECT COUNT (*) FROM LOG")
-      end
+    after(:all) do
+      FileUtils.rm_rf(@registry.handlers[:sqlite3].db_name)
+      @registry.deregister(:sqlite3)
     end
 
     include_examples 'db_handlers', :sqlite3
 
-    it 'logs messages in a sqlite3 database' do
-      expect(@count_rows.call).to eq 0
-      3.times {@registry.log_message(@message)}
-      expect(@count_rows.call).to eq 3
-      FileUtils.rm_rf(@handler.db_name)
+    context 'is registered after the logger is created' do
+      before(:all) do
+        @message.type = :sqlite3
+        @handler = @registry.handlers[:sqlite3]
+        @count_rows = lambda do
+          db = SQLite3::Database.open(@handler.db_name)
+          db.get_first_value("SELECT COUNT (*) FROM #{@handler.table_name}")
+        end
+      end
+
+      it 'logs messages in a sqlite3 database' do
+        expect(@count_rows.call).to eq 0
+        3.times {@registry.log_message(@message)}
+        expect(@count_rows.call).to eq 3
+      end
+    end
+  end
+
+  context Log4Ruby::PostgreSQLHandler do
+    after(:all) do
+      con = @registry.handlers[:postgresql].connect_to_database
+      con.exec("DROP TABLE #{@config.db[:postgresql][:table_name]}")
+      @registry.deregister(:postgresql)
+    end
+
+    include_examples 'db_handlers', :postgresql
+
+    context 'is registered after the logger is created' do
+      before(:all) do
+        @handler = @registry.handlers[:postgresql]
+        @message.type = :postgresql
+        @count_rows = lambda do
+          con = @handler.connect_to_database
+          result = con.exec("SELECT COUNT (*) FROM #{@handler.table_name}")
+          result.first['count']
+        end
+      end
+
+      it 'logs messages in a postgresql database' do
+        expect(@count_rows.call).to eq '0'
+        3.times {@registry.log_message(@message)}
+        expect(@count_rows.call).to eq '3'
+      end
+    end
+  end
+
+  context Log4Ruby::MysqlHandler do
+    after(:all) do
+      con = @registry.handlers[:mysql].connect_to_database
+      con.query("DROP TABLE #{@config.db[:mysql][:table_name]}")
+      @registry.deregister(:mysql)
+    end
+
+    include_examples 'db_handlers', :mysql
+
+    context 'is registered after the logger is created' do
+      before(:all) do
+        @handler = @registry.handlers[:mysql]
+        @message.type = :mysql
+        @count_rows = lambda do
+          con = @handler.connect_to_database
+          con.query("SELECT COUNT(*) FROM #{@handler.table_name}").fetch_row[0]
+        end
+      end
+
+      it 'logs mesages in the mysql database' do
+        expect(@count_rows.call).to eq '0'
+        3.times {@registry.log_message(@message)}
+        expect(@count_rows.call).to eq '3'
+      end
     end
   end
 end

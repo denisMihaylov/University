@@ -42,10 +42,10 @@ message_formatters:
 db:
   default:
     db_name: 'log_database.db'
-    table_name: 'Log'
+    table_name: 'LOG'
   sqlite3:
     db_name: 'sqlite_test.db'
-    table_name: 'Log'
+    table_name: 'LOG'
     types:
       time: 'DATETIME'
       text: 'TEXT'
@@ -54,7 +54,7 @@ db:
     db_name: 'postgres_testdb'
     user: 'postgres_user'
     password: 'password1'
-    table_name: 'Log'
+    table_name: 'LOG'
     types:
       time: 'TIMESTAMP WITH TIME ZONE'
       text: 'VARCHAR(256)'
