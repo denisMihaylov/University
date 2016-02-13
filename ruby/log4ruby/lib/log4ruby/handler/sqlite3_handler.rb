@@ -2,6 +2,7 @@ require 'sqlite3'
 require_relative 'db_handler'
 
 module Log4Ruby
+  #SQLite3 handler that allows logging to a sqlite3 database
   class SQLite3Handler < DBHandler
 
     def initialize

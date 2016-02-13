@@ -2,6 +2,7 @@ require 'pg'
 require_relative 'db_handler'
 
 module Log4Ruby
+  #PostgreSQL handler that allows logging to a postgres database
   class PostgreSQLHandler < DBHandler
     
     def initialize

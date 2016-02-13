@@ -6,6 +6,8 @@ require_relative 'handler/remote_syslog_handler'
 require_relative 'error'
 
 module Log4Ruby
+  #Handler registry that holds all the registered handlers and does the
+  #logging
   class HandlerRegistry
 
     class << self

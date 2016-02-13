@@ -4,6 +4,7 @@ require 'yaml'
 #Usage: Log4Ruby::Config.key_name
 #Example: Log4Ruby::Config.time_formatters
 module Log4Ruby
+  #A holder module for all the logging configurations
   module Config
     extend self
     attr_accessor :settings
@@ -16,7 +17,7 @@ module Log4Ruby
       config_path = File.join(CONFIG_PATH, 'default_config.yaml')
       update(File.expand_path(config_path))
       @settings.each do |method_name, value|
-        define_method(method_name) {@settings[method_name.to_sym]}
+        define_method(method_name) { @settings[method_name.to_sym] }
       end
     end
 
@@ -31,7 +32,7 @@ module Log4Ruby
 
     def method_missing(name, *args, &block)
       if (@settings[name.to_sym])
-        define_method(name) {@settings[name.to_sym]}
+        define_method(name) { @settings[name.to_sym] }
         @settings[name.to_sym]
       else
         super

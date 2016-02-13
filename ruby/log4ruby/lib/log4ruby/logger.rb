@@ -3,6 +3,7 @@ require_relative 'handler_registry'
 require_relative 'message'
 
 module Log4Ruby
+  #Logger class that the user uses as API to log messages
   class Logger
     attr_accessor :level, :id, :handler
 

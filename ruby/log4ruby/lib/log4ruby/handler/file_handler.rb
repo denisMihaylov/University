@@ -4,6 +4,7 @@ require_relative '../handler'
 require_relative '../config'
 
 module Log4Ruby
+  #File Handler that implements file logging
   class FileHandler < Handler
     attr_accessor :rolling
 
@@ -35,7 +36,7 @@ module Log4Ruby
       @file_stats = if File.exists?(get_stats_path)
         YAML.load_file(get_stats_path)
       else
-        {lines: 0, created_on: Time.now, file_index: 0}
+        { lines: 0, created_on: Time.now, file_index: 0 }
       end
     end
 
@@ -62,7 +63,9 @@ module Log4Ruby
     private
 
     def save_file_stats
-      File.open(get_stats_path, 'w') {|file| file.write @file_stats.to_yaml}
+      File.open(get_stats_path, 'w') do |file|
+        file.write @file_stats.to_yaml
+      end
     end
 
     def perform_post_log_actions(file_name)
@@ -77,7 +80,7 @@ module Log4Ruby
     def perform_roll(file_name)
         file_index = @file_stats[:file_index]
         roll_files(file_name, file_index)
-        @file_stats = {lines: 0, created_on: Time.now}
+        @file_stats = { lines: 0, created_on: Time.now }
         @file_stats[:file_index] = file_index + 1
     end
 
@@ -89,7 +92,7 @@ module Log4Ruby
     end
 
     def reset_file_stats
-      @file_stats = {lines: 0, created_on: Time.now}
+      @file_stats = { lines: 0, created_on: Time.now }
     end
 
     def lines_limit?

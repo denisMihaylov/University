@@ -2,6 +2,7 @@ require_relative 'config'
 require 'time'
 
 module Log4Ruby
+  #LogMessage class that is holds the logging information
   class LogMessage
     attr_accessor :message, :level, :type, :logger_id
     attr_reader :exception, :backtrace

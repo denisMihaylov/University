@@ -58,7 +58,7 @@ module Log4Ruby
     end
 
     def map_internal(parts)
-      concat(parts.map {|part| yield part})
+      concat(parts.map { |part| yield part })
     end
 
     def db_name

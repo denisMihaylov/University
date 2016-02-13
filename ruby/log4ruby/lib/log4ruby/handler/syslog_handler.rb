@@ -2,6 +2,7 @@ require_relative 'system_loggable.rb'
 require_relative '../handler'
 
 module Log4Ruby
+  #Basic syslog handler that allows logging the system log
   class SyslogHandler < Handler
     include SystemLoggable
 

@@ -2,6 +2,7 @@ require_relative 'message'
 require_relative 'handler_registry'
 
 module Log4Ruby
+  #LogMessageMiner class that allows mining through the log messages
   class LogMessageMiner
     include Enumerable
 

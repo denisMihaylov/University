@@ -3,6 +3,7 @@ require_relative '../handler'
 require_relative '../config'
 
 module Log4Ruby
+  #Remote handler that allows logging to a remote host
   class RemoteSyslogHandler < Handler
     include SystemLoggable
 

@@ -2,6 +2,7 @@ require 'mysql'
 require_relative 'db_handler'
 
 module Log4Ruby
+  #Mysql handler that allows logging to a mysql database
   class MysqlHandler < DBHandler
 
     def initialize
@@ -22,7 +23,6 @@ module Log4Ruby
     def each_message(filter_hash)
       con = connect_to_database
       p select_statement
-      puts "WTF"
       con.query(select_statement).each do |row|
         message = LogMessage.build(get_hash_from_row(row))
         message.type = :mysql

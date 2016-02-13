@@ -1,6 +1,7 @@
 require_relative '../handler'
 
 module Log4Ruby
+  #Console handler that allows logging messages to the standard output
   class ConsoleHandler < Handler
 
     def initialize

@@ -3,6 +3,7 @@ require_relative '../handler'
 require_relative '../config'
 
 module Log4Ruby
+  #Base Database handler class that all database handlers extend
   class DBHandler < Handler
     include SQLUtils
 
