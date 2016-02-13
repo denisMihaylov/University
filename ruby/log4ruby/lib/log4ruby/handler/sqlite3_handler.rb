@@ -9,6 +9,29 @@ module Log4Ruby
       create_table
     end
 
+    def each_message(filter_hash)
+      db = SQLite3::Database.open(db_name)
+      db.execute(select_statement).each do |row|
+        message = LogMessage.build(get_hash_from_row(row))
+        message.type = :sqlite3
+        yield message if message.satisfy?(filter_hash)
+      end
+      nil
+    rescue SQLite3::Exception => e
+      p e
+    ensure
+      db.close if db
+    end
+
+    def get_hash_from_row(row)
+      result = {}
+      columns = get_columns
+      row.each_with_index do |part, index|
+        result[columns[index]] = part
+      end
+      result
+    end
+
     private
 
     def create_table

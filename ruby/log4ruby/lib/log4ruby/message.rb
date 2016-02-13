@@ -1,4 +1,5 @@
 require_relative 'config'
+require 'time'
 
 module Log4Ruby
   class LogMessage
@@ -10,9 +11,24 @@ module Log4Ruby
       instance_eval(&(proc)) if block_given?
     end
 
-    def build_from_hash(message_hash)
-
+    def self.build(hash)
+      self.new do
+        @message, @level, = hash[:message], hash[:level]
+        @logger_id = hash[:logger_id]
+        @exception, @backtrace = hash[:exception], hash[:backtrace]
+        @time = Time.parse(hash[:time])
+      end
     end
+
+    def satisfy?(filter_hash)
+      filter_hash.empty? || filter_hash.any? do |key, value|
+        if key === :time_range
+          value.cover?(@time)
+        else
+          compare_values(send(key), value)
+        end 
+      end 
+    end 
 
     def parse
       formatter = Config.message_formatters[@type]
@@ -39,6 +55,13 @@ module Log4Ruby
 
     def time
       @time.strftime(Config.time_formatters[@type])
+    end
+
+    private
+
+    def compare_values(message_value, filter_value)
+      filter_value === message_value ||
+      message_value.to_s.downcase.include?(filter_value.to_s.downcase)
     end
 
   end

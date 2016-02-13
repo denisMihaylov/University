@@ -8,7 +8,7 @@ module Log4Ruby
     def initialize(logger_type:, **filter)
       validate_filter(filter)
       validate_logger_type(logger_type)
-      @handler = HandlerRegistry.handlers[:logger_type]
+      @handler = HandlerRegistry.handlers[logger_type]
       @filter = filter
     end
 

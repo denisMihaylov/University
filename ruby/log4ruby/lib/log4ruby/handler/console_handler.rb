@@ -14,21 +14,8 @@ module Log4Ruby
 
     def each_message(filter_hash)
       @processed_messages.each do |message|
-        yield message if message_found?(message, filter_hash)
+        yield message if message.satisfy?(filter_hash)
       end
-    end
-
-    private
-
-    def message_found?(message, filter_hash)
-      filter_hash.any? do |key, value|
-        compare_values(message.send(key), value)
-      end
-    end
-
-    def compare_values(message_value, filter_value)
-      filter_value === message_value ||
-      message_value.to_s.include?(filter_value.to_s)
     end
 
   end

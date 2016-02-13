@@ -5,6 +5,7 @@ module Log4Ruby
   module SQLUtils
     INSERT_STATEMENT = "INSERT INTO %s (%s) VALUES (%s)"
     CREATE_STATEMENT = "CREATE TABLE IF NOT EXISTS %s (Id %s, %s)"
+    SELECT_STATEMENT = "SELECT %s FROM %s"
 
     def create_table_statement
       columns_part = get_columns.map do |column|
@@ -18,6 +19,10 @@ module Log4Ruby
       parts = [table_name, map_internal(get_columns, &:to_s), values]
       INSERT_STATEMENT % parts
     end 
+
+    def select_statement
+      SELECT_STATEMENT % [map_internal(get_columns, &:to_s), table_name]
+    end
 
     def get_values(message)
       columns = get_columns
