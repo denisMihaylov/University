@@ -211,4 +211,13 @@ describe Log4Ruby::Handler do
       end
     end
   end
+
+  context Log4Ruby::SyslogHandler do
+    it 'logs to the syslog of the machine' do
+      @message.type = :syslog
+      @message.logger_id = :local4
+      @registry.log_message(@message)
+      expect(%x[tail /var/log/syslog].include?(@message.message)).to be true
+    end
+  end
 end
