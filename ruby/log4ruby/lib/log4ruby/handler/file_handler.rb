@@ -51,6 +51,10 @@ module Log4Ruby
       perform_post_log_actions(file_name) if @rolling
     end
 
+    def get_file_name
+      "#{Config.file[:file_path]}/log_trace.log"
+    end
+
     private
 
     def save_file_stats
@@ -62,10 +66,6 @@ module Log4Ruby
       @file_stats[:lines] += 1
       perform_roll(file_name)
       save_file_stats
-    end
-
-    def get_file_name
-      "#{Config.file[:file_path]}/log_trace.log"
     end
 
     def perform_roll(file_name)
