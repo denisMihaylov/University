@@ -1,9 +1,8 @@
 require_relative '../handler'
 
 module Log4Ruby
-  #Console handler that allows logging messages to the standard output
+  # Console handler that allows logging messages to the standard output
   class ConsoleHandler < Handler
-
     def initialize
       @processed_messages = []
     end
@@ -18,6 +17,5 @@ module Log4Ruby
         yield message if message.satisfy?(filter_hash)
       end
     end
-
   end
 end

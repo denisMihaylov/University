@@ -3,7 +3,7 @@ require_relative 'handler_registry'
 require_relative 'message'
 
 module Log4Ruby
-  #Logger class that the user uses as API to log messages
+  # Logger class that the user uses as API to log messages
   class Logger
     attr_accessor :level, :id, :handler
 
@@ -17,15 +17,16 @@ module Log4Ruby
       define_method(level) do |message, exception = nil|
         log(level, message, exception) if logging_allowed?(level)
       end
-      define_method("#{level.to_s}_enabled?") do
+      define_method("#{level}_enabled?") do
         logging_allowed?(level)
-      end 
+      end
     end
 
     private
 
     def log(level, message, exception)
-      id, handler = @id, @handler
+      id = @id
+      handler = @handler
       message = LogMessage.new do
         @logger_id = id
         @level = level
@@ -34,11 +35,10 @@ module Log4Ruby
         self.exception = exception if exception
       end
       HandlerRegistry.log_message(message)
-    end 
+    end
 
     def logging_allowed?(level)
       LEVELS.index(level) <= LEVELS.index(@level)
     end
-
   end
 end

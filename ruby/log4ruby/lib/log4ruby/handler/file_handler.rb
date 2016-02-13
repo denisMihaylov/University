@@ -57,7 +57,7 @@ module Log4Ruby
     end
 
     def each_message(filter_hash)
-      
+
     end
 
     private
@@ -78,10 +78,10 @@ module Log4Ruby
     end
 
     def perform_roll(file_name)
-        file_index = @file_stats[:file_index]
-        roll_files(file_name, file_index)
-        @file_stats = { lines: 0, created_on: Time.now }
-        @file_stats[:file_index] = file_index + 1
+      file_index = @file_stats[:file_index]
+      roll_files(file_name, file_index)
+      @file_stats = { lines: 0, created_on: Time.now }
+      @file_stats[:file_index] = file_index + 1
     end
 
     def roll_files(file_name, file_index)
@@ -109,6 +109,5 @@ module Log4Ruby
       ratio = SIZE_UNIT_RATIO[Config.file[:limits][:size_unit]]
       File.stat(get_file_name).size / ratio > Config.file[:limits][:file_size]
     end
-
   end
 end

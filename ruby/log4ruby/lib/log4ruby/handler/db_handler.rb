@@ -3,7 +3,7 @@ require_relative '../handler'
 require_relative '../config'
 
 module Log4Ruby
-  #Base Database handler class that all database handlers extend
+  # Base Database handler class that all database handlers extend
   class DBHandler < Handler
     include SQLUtils
 
@@ -15,8 +15,7 @@ module Log4Ruby
       columns = get_columns
       row.each_with_index.inject({}) do |hash, (part, index)|
         hash.merge!(columns[index] => part)
-      end 
-    end 
-
+      end
+    end
   end
 end

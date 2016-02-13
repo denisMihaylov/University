@@ -2,11 +2,11 @@ require_relative 'message'
 require_relative 'handler_registry'
 
 module Log4Ruby
-  #LogMessageMiner class that allows mining through the log messages
+  # LogMessageMiner class that allows mining through the log messages
   class LogMessageMiner
     include Enumerable
 
-    def initialize(logger_type:, **filter)
+    def initialize(logger_type: , **filter)
       validate_filter(filter)
       validate_logger_type(logger_type)
       @handler = HandlerRegistry.handlers[logger_type]
