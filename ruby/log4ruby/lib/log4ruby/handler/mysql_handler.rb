@@ -19,10 +19,20 @@ module Log4Ruby
       con.close if con
     end
 
+    def each_message(filter_hash)
+      con = connect_to_database
+      p select_statement
+      puts "WTF"
+      con.query(select_statement).each do |row|
+        message = LogMessage.build(get_hash_from_row(row))
+        message.type = :mysql
+        yield message if message.satisfy?(filter_hash)
+      end
+    end
+
     def persist_message(message)
       con = connect_to_database
       con.query(insert_statement(message))
-      @queue = []
     rescue Myslq::Error => e
       puts e.errno
       puts e.error

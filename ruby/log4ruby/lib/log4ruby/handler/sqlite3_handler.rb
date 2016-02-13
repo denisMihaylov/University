@@ -23,13 +23,6 @@ module Log4Ruby
       db.close if db
     end
 
-    def get_hash_from_row(row)
-      columns = get_columns
-      row.each_with_index.inject({}) do |hash, (part, index)|
-        hash.merge!(columns[index] => part)
-      end
-    end
-
     private
 
     def create_table
