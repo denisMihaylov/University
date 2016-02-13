@@ -1,4 +1,7 @@
 require_relative '../lib/log4ruby/handler_registry'
+require_relative '../lib/log4ruby/handler/sqlite3_handler'
+require_relative '../lib/log4ruby/handler/postgresql_handler'
+require_relative '../lib/log4ruby/handler/mysql_handler'
 require_relative '../lib/log4ruby/message'
 require_relative '../lib/log4ruby/config'
 require_relative 'exception_helper'
@@ -35,10 +38,15 @@ describe Log4Ruby::Handler do
       end
     end
 
+    after(:all) do
+      FileUtils.rm_rf(@config.file[:file_path])
+    end
+
     before(:each) do
       @file_entries.call.each do |entry|
         FileUtils.rm_rf(File.join(@config.file[:file_path], entry))
       end
+      @handler.read_file_stats
     end
 
     it 'logs a message to a file' do
@@ -59,12 +67,64 @@ describe Log4Ruby::Handler do
         @handler.rolling = true
       end
 
-      it 'rolls the files when the messages count limit is exceeded' do
+      it 'rolls the files if the messages count limit is exceeded' do
         @config.file[:limits][:message_count] = 2
+
         @registry.log_message(@message)
-        expect(@file_entries.call).to include('log_trace.log')
+        current_entries = @file_entries.call
+
+        expect(current_entries).to include('log_trace.log')
+        expect(current_entries).to include('.stats.yaml')
+
+        @registry.log_message(@message)
+        current_entries = @file_entries.call
+
+        expect(current_entries).not_to include('log_trace.log')
+        expect(current_entries).to include('log_trace.log1')
+        expect(current_entries).to include('.stats.yaml')
+
+        3.times {@registry.log_message(@message)}
+        current_entries = @file_entries.call
+
+        expect(current_entries).to include('log_trace.log')
+        expect(current_entries).to include('log_trace.log1')
+        expect(current_entries).to include('log_trace.log2')
+
+        @config.file[:limits][:message_count] = 20
+      end
+
+      it 'rolls the files if the file size is exceeded' do
+        @config.file[:limits][:file_size] = 50
+        @config.file[:limits][:size_unit] = :byte
+
+        @registry.log_message(@message)
+        current_entries = @file_entries.call
+
+        expect(current_entries).not_to include('log_trace.log')
+        expect(current_entries).to include('log_trace.log1')
+
+        @config.file[:limits][:file_size] = 1_000_000
+      end
+
+      it 'rolls the files if the time is exceeded' do
+        @config.file[:limits][:time] = 1
+        @config.file[:limits][:time_unit] = :millis
+
+        @registry.log_message(@message)
+        current_entries = @file_entries.call
+
+        expect(current_entries).not_to include('log_trace.log')
+        expect(current_entries).to include('log_trace.log1')
+
+        @config.file[:limits][:time] = 1
+        @config.file[:limits][:time_unit] = :day
       end
     end
+  end
 
+  context Log4Ruby::SQLite3Handler do
+    it 'logs messages in a sqlite3 database' do
+      @message.type = :sqlite3
+    end
   end
 end

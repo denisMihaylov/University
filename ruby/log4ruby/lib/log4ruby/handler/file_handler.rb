@@ -15,7 +15,7 @@ module Log4Ruby
     }
 
     TIME_UNIT_RATIO = {
-      millis: 0.001,
+      millis: 0.000001,
       sec: 1,
       min: 60,
       hour: 60 * 60,
