@@ -26,6 +26,7 @@ message_formatters:
       - :logger_id
       - :time
       - :level
+      - :backtrace
     delimiter: '#'
     backtrace_depth: 2
   syslog:

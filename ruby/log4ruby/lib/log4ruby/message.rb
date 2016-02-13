@@ -57,6 +57,14 @@ module Log4Ruby
       @time.strftime(Config.time_formatters[@type])
     end
 
+    def backtrace
+      @backtrace.join("\n") if @backtrace
+    end
+
+    def exception
+      "#{@exception.class}: #{@exception.message}"
+    end
+
     private
 
     def compare_values(message_value, filter_value)
