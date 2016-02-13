@@ -15,6 +15,7 @@ module Log4Ruby
     }
 
     TIME_UNIT_RATIO = {
+      millis: 0.001,
       sec: 1,
       min: 60,
       hour: 60 * 60,
@@ -23,12 +24,11 @@ module Log4Ruby
       month: 30 * 7 * 24 * 60 * 60,
     }
 
-    def initialize()
+    def initialize
       @rolling, @type = Config.file[:rolling], :file
       file_path = Config.file[:file_path]
       FileUtils.mkdir_p(file_path) unless Dir.exists?(file_path)
       read_file_stats
-      @file_stats
     end
 
     def read_file_stats
@@ -43,16 +43,18 @@ module Log4Ruby
       File.join(Config.file[:file_path], '.stats.yaml')
     end
 
-    def save_file_stats
-      File.open(get_stats_path, 'w') {|file| file.write @file_stats.to_yaml}
-    end
-
     def log_message(message)
       file_name = get_file_name
       File.open(file_name, 'a+') do |file|
         file.puts(message.parse)
       end
-      perform_post_log_actions(file_name)
+      perform_post_log_actions(file_name) if @rolling
+    end
+
+    private
+
+    def save_file_stats
+      File.open(get_stats_path, 'w') {|file| file.write @file_stats.to_yaml}
     end
 
     def perform_post_log_actions(file_name)

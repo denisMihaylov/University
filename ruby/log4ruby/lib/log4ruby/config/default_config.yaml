@@ -81,4 +81,4 @@ file:
     file_size: 1244
     size_unit: :byte #byte, kbyte, mbyte, gbyte
     time: 15
-    time_unit: :sec #sec, min, hour, day, week, month
+    time_unit: :sec #millis, sec, min, hour, day, week, month
