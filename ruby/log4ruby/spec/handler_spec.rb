@@ -79,7 +79,6 @@ describe Log4Ruby::Handler do
         expect(current_entries).to include('.stats.yaml')
 
         @registry.log_message(@message)
-        Process.waitall
         current_entries = @file_entries.call
 
         expect(current_entries).not_to include('log_trace.log')
@@ -87,7 +86,6 @@ describe Log4Ruby::Handler do
         expect(current_entries).to include('.stats.yaml')
 
         3.times {@registry.log_message(@message)}
-        Process.waitall
         current_entries = @file_entries.call
 
         expect(current_entries).to include('log_trace.log')

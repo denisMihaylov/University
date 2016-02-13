@@ -68,17 +68,17 @@ module Log4Ruby
     def perform_post_log_actions(file_name)
       @file_stats[:created_on] = Time.now if @file_stats[:lines] == 0
       @file_stats[:lines] += 1
-      perform_roll(file_name) if @rolling
+      if @rolling && (lines_limit? || time_limit? || size_limit?)
+        perform_roll(file_name)
+      end
       save_file_stats
     end
 
     def perform_roll(file_name)
-      if lines_limit? || time_limit? || size_limit?
         file_index = @file_stats[:file_index]
         roll_files(file_name, file_index)
         @file_stats = {lines: 0, created_on: Time.now}
         @file_stats[:file_index] = file_index + 1
-      end
     end
 
     def roll_files(file_name, file_index)
