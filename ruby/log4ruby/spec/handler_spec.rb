@@ -2,6 +2,7 @@ require_relative '../lib/log4ruby/handler_registry'
 require_relative '../lib/log4ruby/handler/sqlite3_handler'
 require_relative '../lib/log4ruby/handler/postgresql_handler'
 require_relative '../lib/log4ruby/handler/mysql_handler'
+require_relative '../lib/log4ruby/logger_provider'
 require_relative '../lib/log4ruby/message'
 require_relative '../lib/log4ruby/config'
 require_relative 'exception_helper'
@@ -12,6 +13,7 @@ describe Log4Ruby::Handler do
     @registry = Log4Ruby::HandlerRegistry
     @message = Log4Ruby::LogMessage.new do
       @logger_id = "logger_id"
+      @time = Time.now
       @level = :info
       @message = "message"
       self.exception = get_exception
@@ -122,9 +124,30 @@ describe Log4Ruby::Handler do
     end
   end
 
+  shared_examples 'db_handlers' do |type|
+    it 'is registered when a logger is created' do
+      expect(@registry.handlers[type]).to be nil
+      Log4Ruby.send("#{type}_logger", "LOGGER_ID")
+    end
+  end
+
   context Log4Ruby::SQLite3Handler do
-    it 'logs messages in a sqlite3 database' do
+    before(:each) do
       @message.type = :sqlite3
+      @handler = @registry.handlers[:sqlite3]
+      @count_rows = lambda do
+        db = SQLite3::Database.open(@handler.db_name)
+        db.get_first_value("SELECT COUNT (*) FROM LOG")
+      end
+    end
+
+    include_examples 'db_handlers', :sqlite3
+
+    it 'logs messages in a sqlite3 database' do
+      expect(@count_rows.call).to eq 0
+      3.times {@registry.log_message(@message)}
+      expect(@count_rows.call).to eq 3
+      FileUtils.rm_rf(@handler.db_name)
     end
   end
 end
