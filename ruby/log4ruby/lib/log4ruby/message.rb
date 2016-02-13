@@ -62,7 +62,7 @@ module Log4Ruby
     end
 
     def exception
-      "#{@exception.class}: #{@exception.message}"
+      "#{@exception.class}: #{@exception.to_s}" if @exception
     end
 
     private

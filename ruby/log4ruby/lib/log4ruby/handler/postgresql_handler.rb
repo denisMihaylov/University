@@ -19,6 +19,25 @@ module Log4Ruby
       con.close if con
     end
 
+    def each_message(filter_hash)
+      con = connect_to_database
+      result = con.exec(select_statement)
+      result.each do |row|
+        message = LogMessage.build(get_hash_from_row(row))
+        message.type = :sqlite3
+        yield message if message.satisfy?(filter_hash)
+      end
+    rescue PG::Error => e
+      p e 
+      p e.backtrace.take(5) if e.backtrace
+    ensure
+      con.close if con 
+    end 
+
+    def get_hash_from_row(row)
+      row.inject({}) {|hash, (key, value)| hash[key.to_sym] = value}
+    end
+
     def persist_message(message)
       con = connect_to_database
       con.exec(insert_statement(message))

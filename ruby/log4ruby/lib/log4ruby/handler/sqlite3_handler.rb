@@ -24,12 +24,10 @@ module Log4Ruby
     end
 
     def get_hash_from_row(row)
-      result = {}
       columns = get_columns
-      row.each_with_index do |part, index|
-        result[columns[index]] = part
+      row.each_with_index.inject({}) do |hash, (part, index)|
+        hash.merge!(columns[index] => part)
       end
-      result
     end
 
     private
