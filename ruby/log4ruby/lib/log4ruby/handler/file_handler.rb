@@ -48,11 +48,15 @@ module Log4Ruby
       File.open(file_name, 'a+') do |file|
         file.puts(message.parse)
       end
-      perform_post_log_actions(file_name) if @rolling
+      perform_post_log_actions(file_name)
     end
 
     def get_file_name
       "#{Config.file[:file_path]}/log_trace.log"
+    end
+
+    def each_message(filter_hash)
+      
     end
 
     private
@@ -64,7 +68,7 @@ module Log4Ruby
     def perform_post_log_actions(file_name)
       @file_stats[:created_on] = Time.now if @file_stats[:lines] == 0
       @file_stats[:lines] += 1
-      perform_roll(file_name)
+      perform_roll(file_name) if @rolling
       save_file_stats
     end
 

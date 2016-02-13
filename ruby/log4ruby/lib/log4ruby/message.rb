@@ -2,12 +2,16 @@ require_relative 'config'
 
 module Log4Ruby
   class LogMessage
-    attr_accessor :message, :level, :type
-    attr_reader :exception, :logger_id, :backtrace
+    attr_accessor :message, :level, :type, :logger_id
+    attr_reader :exception, :backtrace
 
     def initialize
       @time = Time.now
       instance_eval(&(proc)) if block_given?
+    end
+
+    def build_from_hash(message_hash)
+
     end
 
     def parse
