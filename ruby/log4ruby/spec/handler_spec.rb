@@ -30,11 +30,15 @@ describe Log4Ruby::Handler do
       @handler.rolling = false
       @message.type = :file
       @file_path = @handler.get_file_name
+      @file_entries = lambda do
+        Dir.entries(@config.file[:file_path]) - ['.', '..']
+      end
     end
 
     before(:each) do
-      entries = Dir.entries(@config.file[:file_path]) - ['.', '..']
-      FileUtils.rm_rf(entries)
+      @file_entries.call.each do |entry|
+        FileUtils.rm_rf(File.join(@config.file[:file_path], entry))
+      end
     end
 
     it 'logs a message to a file' do
@@ -42,6 +46,23 @@ describe Log4Ruby::Handler do
       expect(File.exist?(@file_path)).to be true
       File.open(@file_path, 'r') do |file|
        expect(file.gets).to eq(@message.parse + "\n")
+      end
+    end
+
+    it 'does not perform the rolling if not configured' do
+      expect(@handler).not_to receive(:perform_post_log_actions)
+      @registry.log_message(@message)
+    end
+
+    context 'performs rolling by limits defined in the configuration' do
+      before(:all) do
+        @handler.rolling = true
+      end
+
+      it 'rolls the files when the messages count limit is exceeded' do
+        @config.file[:limits][:message_count] = 2
+        @registry.log_message(@message)
+        expect(@file_entries.call).to include('log_trace.log')
       end
     end
 
