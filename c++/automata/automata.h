@@ -23,4 +23,8 @@ public:
 	const ui get_final_states_count() const;
 	const ui* get_final_states() const;
 	void set_final_states(const ui* final_states, const ui final_states_count);
+
+	virtual void add_transition(const ui start, const char letter, const ui end) = 0;
+	
+	virtual bool check_word(const char* word) = 0;
 };
