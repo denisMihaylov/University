@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include "automata.h"
 
 int main(int argc, char **argv)
 {
-	printf("hello world\n");
+	DFA dfa;
 	return 0;
 }

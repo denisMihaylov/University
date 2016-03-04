@@ -92,5 +92,7 @@
   </Settings>
   <VirtualDirectory Name="src">
     <File Name="main.cpp"/>
+    <File Name="automata.h"/>
+    <File Name="automata.cpp"/>
   </VirtualDirectory>
 </CodeLite_Project>

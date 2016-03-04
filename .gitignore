@@ -7,3 +7,7 @@ ruby/log4ruby/sqlite_test.db
 ruby/log_test/*
 *.gem
 ruby/log4ruby/UntitledDocument
+c++/*/Debug
+c++/*/*
+!c++/*/*.h
+!c++/**/*.cpp
