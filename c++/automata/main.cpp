@@ -3,6 +3,6 @@
 
 int main(int argc, char **argv)
 {
-	DFA dfa;
+	NDFA dfa;
 	return 0;
 }
