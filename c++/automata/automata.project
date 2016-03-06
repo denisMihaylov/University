@@ -96,5 +96,7 @@
     <File Name="automata.cpp"/>
     <File Name="nfa.h"/>
     <File Name="nfa.cpp"/>
+    <File Name="dfa.h"/>
+    <File Name="dfa.cpp"/>
   </VirtualDirectory>
 </CodeLite_Project>

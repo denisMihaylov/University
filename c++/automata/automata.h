@@ -24,7 +24,10 @@ public:
 	const ui* get_final_states() const;
 	void set_final_states(const ui* final_states, const ui final_states_count);
 
+	const ui letter_to_index(const char letter) const;
+	const bool is_state_final(const ui state) const;
+
 	virtual void add_transition(const ui start, const char letter, const ui end) = 0;
 	
-	virtual bool check_word(const char* word) = 0;
+	virtual bool check_word(const char* input) = 0;
 };

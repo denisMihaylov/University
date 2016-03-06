@@ -3,9 +3,7 @@
 #include <algorithm>
 
 NFA::NFA(): Automata() {
-	for (ui i = 0; i < MAX_ALPHABET_SIZE; i++) {
-		memset(transition[i], -1, MAX_STATES_COUNT);
-	}
+	//do nothing for now
 }
 
 const ui NFA::get_initial_states_count() const {
@@ -23,11 +21,11 @@ void NFA::set_initial_states(const ui* initial_states, const ui initial_states_c
 }
 
 void NFA::add_transition(const ui start, const char letter, const ui end) {
-	transition[letter - 'a'][start] = end;
+	
 }
 
 const ui NFA::get_transition(const ui start, const char letter) const {
-	return transition[letter - 'a'][start];
+	return 0;
 }
 
 bool NFA::check_word(const char* input) {
