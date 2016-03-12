@@ -3,7 +3,7 @@ import argparse
 from PIL import Image
 from matplotlib import pyplot
 
-import solution
+import first
 
 parser = argparse.ArgumentParser(description='Visualize your homework.')
 parser.add_argument('file', type=str, help="JPEG file to manipulate")
@@ -23,7 +23,7 @@ for h in range(image.size[1]):
     picture.append(pixels[(h*image.size[0]):((h+1)*image.size[0])])
 
 try:
-    operation_result = getattr(solution, args.operation)(picture, *args.args)
+    operation_result = getattr(first, args.operation)(picture, *args.args)
     filename = '{}_{}.jpg'.format(args.file.split('.')[0], args.operation)
 except Exception as exc:
     print("There's something wrong with your implementation of "
