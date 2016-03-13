@@ -38,13 +38,13 @@ def darken(picture, factor):
 
 def create_histogram(picture):
     histogram = {
-        0: dict.fromkeys(range(0, 256), 0),
-        1: dict.fromkeys(range(0, 256), 0),
-        2: dict.fromkeys(range(0, 256), 0),
+        0: {},
+        1: {},
+        2: {},
     }
 
     def add_color(index, color):
-        histogram[index][color] += 1
+        histogram[index][color] = histogram[index].get(color, 0) + 1
     map_picture(add_color, picture)
     return {
         "red": histogram[0],
