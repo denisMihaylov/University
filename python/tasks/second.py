@@ -35,7 +35,6 @@ class Constant:
         return create_operator('+', lambda lhs, rhs: lhs + rhs)
 
     def __radd__(self, second):
-        print(self)
         return Constant.__add__(second, self)
 
     @to_expression
@@ -96,9 +95,9 @@ class Expression(Constant):
 
     @property
     def arguments(self):
-        def helper(variables, item):
+        def concat_arguments(variables, item):
             return variables + convert(item).arguments
-        return reduce(helper, [self.exp[0], self.exp[2]], [])
+        return reduce(concat_arguments, [self.exp[0], self.exp[2]], [])
 
     @property
     def variable_names(self):
