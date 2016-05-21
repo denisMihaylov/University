@@ -1,0 +1,27 @@
+"title" "current" "previous" "gross"
+"Pearl Harbor (TO)             " 29.6 "75.2" 118.9
+"Shrek (DW)                    " 28.2 "55.2" 148.4
+"The Animal (CO)               " 19.6 "  NA"  19.6
+"Moulin Rouge (20)             " 13.7 " 0.3"  14.4
+"What's the Worst that... (MGM)" 13.0 "  NA"  13.0
+"The Mummy Returns (UN)        "  7.8 "19.0" 181.2
+"A Knight's Tale (CO)          "  3.4 " 9.1"  49.4
+"Bridget Jones's Diary (MM)    "  2.0 " 4.2"  65.4
+"Angel Eyes (WB)               "  1.9 " 6.2"  21.7
+"Momento (Newmarket Films)     "  1.0 " 1.9"  15.8
+"Along Came a Spider (PA)      "  0.7 " 2.1"  71.8
+"Spy Kids (DI)                 "  0.4 " 1.3" 105.9
+"Blow (NL)                     "  0.4 " 1.3"  52.2
+"Driven (WB)                   "  0.3 " 1.2"  31.8
+"O'Brother, Where Art... (TS)  "  0.3 " 0.3"  44.2
+"Crocodile Dundee in L.A. (PA) "  0.3 " 1.0"  24.3
+"The Tailor of Panama (CO)     "  0.3 " 0.7"  12.9
+"Crouching Tiger...Dragon (SC) "  0.3 " 0.5" 127.2
+"Save the Last Dance (PA)      "  0.2 " 0.5"  90.2
+"The Golden Bowl (LG)          "  0.2 " 0.5"   1.5
+"With a Friend Like Harry (MM) "  0.2 " 0.4"   1.8
+"Traffic (USA)                 "  0.1 " 0.4" 123.8
+"Castaway (20)                 "  0.1 " 0.2" 233.2
+"Startup.com (AR)              "  0.1 " 0.2"   0.5
+"Amores Perros (Lions Gate)    "  0.1 " 0.3"   4.8
+"Kingdom Come (FS)             "  0.1 " 0.4"  22.7

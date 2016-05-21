@@ -20,11 +20,11 @@ void NFA::set_initial_states(const ui* initial_states, const ui initial_states_c
 	this->initial_states_count = initial_states_count;
 }
 
-void NFA::add_transition(const ui start, const char letter, const ui end) {
+void NFA::add_transition(const ui start, const char symbol, const ui end) {
 	
 }
 
-const ui NFA::get_transition(const ui start, const char letter) const {
+const ui NFA::get_transition(const ui start, const char symbol) const {
 	return 0;
 }
 

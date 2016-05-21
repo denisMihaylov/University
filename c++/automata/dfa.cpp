@@ -1,5 +1,5 @@
 #include "dfa.h"
-#include "string.h"
+#include <string.h>
 #include <algorithm>
 
 DFA::DFA() : Automata() {
@@ -16,19 +16,19 @@ void DFA::set_initial_state(const ui initial_state) {
 	this->initial_state = initial_state;
 }
 
-void DFA::add_transition(const ui start, const char letter, const ui end) {
-	transition[letter_to_index(letter)][start] = end;
+void DFA::add_transition(const ui start, const char symbol, const ui end) {
+	transition[symbol_to_index(symbol)][start] = end;
 }
 
-const ui DFA::get_transition(const ui start, const char letter) const {
-	return transition[letter_to_index(letter)][start];
+const ui DFA::get_transition(const ui start, const char symbol) const {
+	return transition[symbol_to_index(symbol)][start];
 }
 
 bool DFA::check_word(const char* input) {
 	ui state = initial_state;
 	for (ui i = 0; i < strlen(input); i++) {
 		state = get_transition(state, input[i]);
-		if (state == -1) {
+		if (state == (ui)-1) {
 			return false;
 		}
 	}

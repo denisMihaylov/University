@@ -1,3 +1,6 @@
+#ifndef AUTOMATA_H
+#define AUTOMATA_H
+
 #define MAX_ALPHABET_SIZE 27
 #define MAX_STATES_COUNT 100
 typedef unsigned int ui;
@@ -24,10 +27,12 @@ public:
 	const ui* get_final_states() const;
 	void set_final_states(const ui* final_states, const ui final_states_count);
 
-	const ui letter_to_index(const char letter) const;
+	const ui symbol_to_index(const char symbol) const;
 	const bool is_state_final(const ui state) const;
 
 	virtual void add_transition(const ui start, const char letter, const ui end) = 0;
-	
+
 	virtual bool check_word(const char* input) = 0;
 };
+
+#endif

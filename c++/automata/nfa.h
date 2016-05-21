@@ -1,3 +1,6 @@
+#ifndef NFA_H
+#define NFA_H
+
 #include "automata.h"
 
 //the type of the transition (ui) limits the states count to 4294967295
@@ -14,8 +17,10 @@ public:
 	const ui* get_initial_states() const;
 	void set_initial_states(const ui *initial_states, const ui initial_states_count);
 	
-	void add_transition(const ui start, const char letter, const ui end);
-	const ui get_transition(const ui start, const char letter) const;
+	void add_transition(const ui start, const char symbol, const ui end);
+	const ui get_transition(const ui start, const char symbol) const;
 	
 	bool check_word(const char* input);
 };
+
+#endif

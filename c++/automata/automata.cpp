@@ -32,8 +32,8 @@ const ui* Automata::get_final_states() const {
 	return final_states;
 }
 
-const ui Automata::letter_to_index(const char letter) const {
-	return letter - 'a';
+const ui Automata::symbol_to_index(const char symbol) const {
+	return symbol - 'a';
 }
 
 const bool Automata::is_state_final(const ui state) const {

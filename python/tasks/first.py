@@ -2,6 +2,22 @@ def get_columns(matrix):
     return [list(x) for x in zip(*matrix)]
 
 
+def grayscale(function):
+    def grayscale_pixel(pixel):
+        red = int(0.299 * pixel[0])
+        green = int(0.587 * pixel[1])
+        blue = int(0.114 * pixel[2])
+        gray = red + green + blue
+        return (gray, gray, gray)
+
+    def decorator(picture):
+        new_picture = function(picture)
+        return [list(map(grayscale_pixel, row)) for row in new_picture]
+
+    return decorator
+
+
+@grayscale
 def rotate_left(picture):
     columns = get_columns(picture)
     return columns[::-1]

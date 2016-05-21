@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include "dfa.h"
+#include "tarjan_table.h"
 
 void dfa_test();
 
 int main(int argc, char **argv)
 {
 	//dfa_test();
+	TarjanTable tarjan;
 	return 0;
 }
 

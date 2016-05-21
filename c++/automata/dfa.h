@@ -1,3 +1,6 @@
+#ifndef DFA_H
+#define DFA_H
+
 #include "automata.h"
 
 class DFA : public Automata {
@@ -10,8 +13,10 @@ public:
 	const ui get_initial_state() const;
 	void set_initial_state(const ui initial_state);
 
-	void add_transition(const ui start, const char letter, const ui end);
-	const ui get_transition(const ui start, const char letter) const;
+	void add_transition(const ui start, const char symbol, const ui end);
+	const ui get_transition(const ui start, const char symbol) const;
 
 	bool check_word(const char *input);
 };
+
+#endif

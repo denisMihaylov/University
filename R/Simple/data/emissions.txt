@@ -1,0 +1,6 @@
+Data set for 1999
+
+lists GDP, GDP/capita and CO2 emissions. 
+
+SOurces: www.grida.no for CO@
+         www,nrdowling.com for GDP

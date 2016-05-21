@@ -1,0 +1,13 @@
+To install you must:
+
+* make the R packages for zip and tgz
+	* R CMD check
+	* what to do for zip
+	* use prompt() to get skeleton documentation
+
+* create HTML
+	* Make-html.sh
+
+* install html with loadsite
+
+* 

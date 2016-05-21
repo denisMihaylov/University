@@ -98,5 +98,11 @@
     <File Name="nfa.cpp"/>
     <File Name="dfa.h"/>
     <File Name="dfa.cpp"/>
+    <File Name="util.h"/>
+    <File Name="util.cpp"/>
+    <File Name="tarjan_table.cpp"/>
+    <File Name="tarjan_table.h"/>
+    <File Name="pair.h"/>
+    <File Name="pair.cpp"/>
   </VirtualDirectory>
 </CodeLite_Project>
