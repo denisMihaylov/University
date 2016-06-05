@@ -11,3 +11,4 @@ c++/*/Debug
 c++/*/*
 !c++/*/*.h
 !c++/**/*.cpp
+python/BattleGround/*
