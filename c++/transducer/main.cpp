@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <regular_exp.h>
+#include <transducer.h>
 
 char alphabet[50];
 int alphabet_size;
@@ -7,11 +8,9 @@ int alphabet_size;
 void read_alphabet();
 
 int main(int argc, char **argv) {
-	read_alphabet();
-	for (int i = 0; i < alphabet_size; i++) {
-		printf("%c\n", alphabet[i]);
-	}
-	const char * expression = "";
+	//read_alphabet();
+	
+	char * expression = (char*)"<awe, bfc, 132>*";
 	RegExp reg_exp(expression);
 	return 0;
 }
