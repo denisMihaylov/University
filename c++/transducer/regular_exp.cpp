@@ -2,36 +2,56 @@
 #include <string.h>
 #include <stdlib.h>
 
-RegExp::RegExp(char* expression) {
-	this->operations.reserve(64);
-	this->transducers.reserve(64);
+RegExp::RegExp(const char* alphabet, const char* expression) {
+	this->alphabet = alphabet;
 	this->expression = expression;
+	this->transducers.reserve(64);
+}
+
+BerrySethiTransducer* RegExp::to_transducer() {
+	//This will be the numbers of the states in the final Berry-Sethi transducer
+	ui monoids_count = 0;
+	for (ui i = 0; i < strlen(expression); i++) {
+		if (expression[i] == '<') {
+			monoids_count++;
+		}
+	}
 	
+	bool is_first_monoid = true;
+	ui serial_number = 0;
 	for (ui i = 0; i < strlen(expression); i++) {
 		switch(expression[i]) {
 			case '<': {
-					char* input = read_word(i);
-					char* output = read_word(++i);
+					const char* input = read_word(i);
+					const char* output = read_word(++i);
 					i+=2;
 					ui weight = read_number(i);
+					serial_number++;
 					Monoid monoid(input, output, weight);
-					this->transducers.push_back(new Transducer(monoid));
+					if (is_first_monoid) {
+						BerrySethiTransducer* transducer = new BerrySethiTransducer(this->alphabet, &monoid, monoids_count);
+						this->transducers.push_back(transducer);
+					} else {
+						this->transducers.push_back(new BerrySethiTransducer(this->alphabet, serial_number, &monoid));
+					}
+					is_first_monoid = false;
 				}
 				break;
 			case '|':
-				this->operations.push_back(UNION);
+				
 				break;
 			case '*':
-				this->operations.push_back(STAR);
+				
 				break;
 			case '.':
-				this->operations.push_back(CONCAT);
+				
 				break;
 		}
 	}
+	return this->transducers.at(0);
 }
 
-char* RegExp::read_word(ui& i) {
+const char* RegExp::read_word(ui& i) {
 	ui start = ++i;
 	for(;expression[i] != ','; i++);
 	char* word = (char*)malloc(sizeof (char) * 100);

@@ -3,12 +3,15 @@
 
 typedef unsigned int ui;
 
-struct Monoid {
-	char* input;
-	char* output;
+class Monoid {
+	
+public:
+	ui serial_number;
+	const char* input;
+	const char* output;
 	ui weight;
 	Monoid(){};
-	Monoid(char* input, char* output, int weight):input(input), output(output), weight(weight){};
+	Monoid(const char* input, const char* output, ui weight):input(input), output(output), weight(weight){};
 };
 
 #endif

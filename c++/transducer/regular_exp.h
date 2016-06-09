@@ -4,25 +4,21 @@
 #include <stdio.h>
 #include <string.h>
 #include <transducer.h>
+#include <bs_transducer.h>
 #include <vector>
 
 typedef unsigned int ui;
 
-enum RegExpOperation {
-	STAR,
-	UNION,
-	CONCAT
-};
-
 //In reverse polish notation
 class RegExp {
-	std::vector<RegExpOperation> operations;
-	std::vector<Transducer*> transducers;
-	char* expression;
+	std::vector<BerrySethiTransducer*> transducers;
+	const char* expression;
+	const char* alphabet;
 public:
-	RegExp(char* expression);
+	RegExp(const char* alphabet, const char* expression);
+	BerrySethiTransducer* to_transducer();
 private:
-	char* read_word(ui& i);
+	const char* read_word(ui& i);
 	ui read_number(ui& i);
 };
 

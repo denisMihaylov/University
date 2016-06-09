@@ -1,23 +1,26 @@
 #include <stdio.h>
 #include <regular_exp.h>
 #include <transducer.h>
+#include <bs_transducer.h>
 
-char alphabet[50];
-int alphabet_size;
-
-void read_alphabet();
+const char* read_alphabet();
 
 int main(int argc, char **argv) {
-	//read_alphabet();
-	
-	char * expression = (char*)"<awe, bfc, 132>*";
-	RegExp reg_exp(expression);
+	//const char* alphabet = read_alphabet();
+	const char* alphabet = "abcd";
+	const char * expression = "<awe, bfc, 132>*";
+	RegExp reg_exp(alphabet, expression);
+	BerrySethiTransducer* transducer = reg_exp.to_transducer();
 	return 0;
 }
 
-void read_alphabet() {
+const char* read_alphabet() {
+	ui alphabet_size;
 	scanf("%d\n", &alphabet_size);
-	for (int i = 0; i < alphabet_size; i++) {
+	char* alphabet = new char[alphabet_size + 1];
+	for (ui i = 0; i < alphabet_size; i++) {
 		scanf(" %c", alphabet + i);
 	}
+	alphabet[alphabet_size] = '\0';
+	return alphabet;
 }
