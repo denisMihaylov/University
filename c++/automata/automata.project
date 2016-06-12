@@ -105,4 +105,6 @@
     <File Name="pair.h"/>
     <File Name="pair.cpp"/>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
 </CodeLite_Project>

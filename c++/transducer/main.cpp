@@ -8,7 +8,7 @@ const char* read_alphabet();
 int main(int argc, char **argv) {
 	//const char* alphabet = read_alphabet();
 	const char* alphabet = "abcd";
-	const char * expression = "<awe, bfc, 132>*";
+	const char * expression = "<a, b, 1><bd, h, 2>|*<b, c, 2>.<d, e, 1>*.<c, h, f>|";
 	RegExp reg_exp(alphabet, expression);
 	BerrySethiTransducer* transducer = reg_exp.to_transducer();
 	return 0;

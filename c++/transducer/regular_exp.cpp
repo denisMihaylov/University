@@ -1,6 +1,7 @@
 #include <regular_exp.h>
 #include <string.h>
 #include <stdlib.h>
+#include <iostream>
 
 RegExp::RegExp(const char* alphabet, const char* expression) {
 	this->alphabet = alphabet;
@@ -16,9 +17,9 @@ BerrySethiTransducer* RegExp::to_transducer() {
 			monoids_count++;
 		}
 	}
-	
+	std::cout<<"MONOIDS COUNT: "<<monoids_count<<std::endl;
 	bool is_first_monoid = true;
-	ui serial_number = 0;
+	ui first_state = 1;
 	for (ui i = 0; i < strlen(expression); i++) {
 		switch(expression[i]) {
 			case '<': {
@@ -26,36 +27,66 @@ BerrySethiTransducer* RegExp::to_transducer() {
 					const char* output = read_word(++i);
 					i+=2;
 					ui weight = read_number(i);
-					serial_number++;
-					Monoid monoid(input, output, weight);
+					Monoid* monoid = new Monoid(input, output, weight);
 					if (is_first_monoid) {
-						BerrySethiTransducer* transducer = new BerrySethiTransducer(this->alphabet, &monoid, monoids_count);
+						BerrySethiTransducer* transducer = new BerrySethiTransducer(this->alphabet, monoid, monoids_count);
+						std::cout<<"TRANSDUCER #"<< first_state << ": "<< (*transducer)<<std::endl<<std::endl;
 						this->transducers.push_back(transducer);
+						is_first_monoid = false;
 					} else {
-						this->transducers.push_back(new BerrySethiTransducer(this->alphabet, serial_number, &monoid));
+						BerrySethiTransducer* transducer = new BerrySethiTransducer(this->alphabet, first_state, monoid);
+						std::cout<<"TRANSDUCER #"<< first_state << ": "<< (*transducer)<<std::endl<<std::endl;
+						this->transducers.push_back(transducer);
 					}
-					is_first_monoid = false;
+					first_state++;
 				}
 				break;
-			case '|':
-				
+			case '|': {
+					BerrySethiTransducer* second = this->transducers.back();
+					this->transducers.pop_back();
+					BerrySethiTransducer* first = this->transducers.back();
+					std::cout<<"UNION"<<std::endl;
+					std::cout<<"1."<< (*first)<<std::endl;
+					std::cout<<"2."<< (*second)<<std::endl;
+					first->bs_union(second);
+					std::cout<<"AFTER UNION"<<std::endl;
+					std::cout<<(*first)<<std::endl;
+					delete second;
+				}
 				break;
-			case '*':
-				
+			case '*': {
+					BerrySethiTransducer* transducer = this->transducers.back();
+					std::cout<<"STAR"<<std::endl;
+					std::cout<<(*transducer)<<std::endl;
+					transducer->star();
+					std::cout<<"AFTER STAR"<<std::endl;
+					std::cout<<(*transducer)<<std::endl;
+				}
 				break;
-			case '.':
-				
+			case '.': {
+					BerrySethiTransducer* second = this->transducers.back();
+					this->transducers.pop_back();
+					BerrySethiTransducer* first = this->transducers.back();
+					std::cout<<"CONCAT"<<std::endl;
+					std::cout<<"1."<< (*first)<<std::endl;
+					std::cout<<"2."<< (*second)<<std::endl;
+					first->concat(second);
+					std::cout<<"AFTER CONCAT"<<std::endl;
+					std::cout<<(*first)<<std::endl;
+					delete second;
+				}
 				break;
 		}
 	}
-	return this->transducers.at(0);
+	return this->transducers.back();
 }
 
 const char* RegExp::read_word(ui& i) {
 	ui start = ++i;
 	for(;expression[i] != ','; i++);
-	char* word = (char*)malloc(sizeof (char) * 100);
+	char* word = (char*)malloc(sizeof (char) * (i - start + 1));
 	strncpy(word, expression + start, i - start);
+	word[i - start + 1] = '\0';
 	return word;
 }
 

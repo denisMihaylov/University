@@ -8,7 +8,6 @@ public:
 	K first;
 	V second;
 
-	pair<K, V>():first(-1), second(-1){};
 	pair<K, V>(K first, V second);
 	pair<K, V>(const pair<K, V> &other);
 

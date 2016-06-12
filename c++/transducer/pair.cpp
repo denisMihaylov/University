@@ -1,4 +1,7 @@
 #include "pair.h"
+#include <vector>
+
+typedef unsigned int ui;
 
 template <class K, class V>
 pair<K, V>::pair(K first, V second) {
@@ -23,3 +26,4 @@ pair<K, V>& pair<K, V>::operator=(const pair<K, V> &other) {
 
 template class pair<unsigned int, unsigned int>;
 template class pair<char, unsigned int>;
+template class pair<std::vector<ui>, std::vector<ui> >;
