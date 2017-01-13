@@ -24,7 +24,6 @@ class BerrySethiTransducer
 public:
     BerrySethiTransducer(const char* alphabet, Monoid* monoid, ui monoids_count);
     BerrySethiTransducer(const char* alphabet, ui first_state, Monoid* monoid);
-    Transducer& to_transducer();
 
     void bs_union(const BerrySethiTransducer* other);
     void concat(const BerrySethiTransducer* other);
@@ -32,13 +31,15 @@ public:
 
     // getters
 
-    const char* getAlphabet() const;
-    std::vector<ui>* getFirst() const;
-    std::vector<pair<std::vector<ui>, std::vector<ui> >*>* getFollow() const;
-    bool getIsFirstFinal() const;
-    std::vector<ui>* getLast() const;
-    std::vector<Monoid*>* getQMap() const;
-    const ui& getStatesCount() const;
+    const char* get_alphabet() const;
+    std::vector<ui>* get_first() const;
+    std::vector<pair<std::vector<ui>, std::vector<ui> >*>* get_follow() const;
+    bool first_final() const;
+    std::vector<ui>* get_last() const;
+    std::vector<Monoid*>* get_Qmap() const;
+    const ui& get_states_count() const;
+
+    Transducer& to_transducer();
 
     friend std::ostream& operator<<(std::ostream& os, const BerrySethiTransducer& transducer);
 

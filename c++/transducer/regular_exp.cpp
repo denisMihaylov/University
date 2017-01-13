@@ -27,17 +27,23 @@ BerrySethiTransducer* RegExp::to_transducer() {
 					const char* output = read_word(++i);
 					i+=2;
 					ui weight = read_number(i);
-					Monoid* monoid = new Monoid(input, output, weight);
+					Monoid* monoid = new Monoid(input[0], output, weight);
+					BerrySethiTransducer* transducer = NULL;
 					if (is_first_monoid) {
-						BerrySethiTransducer* transducer = new BerrySethiTransducer(this->alphabet, monoid, monoids_count);
-						std::cout<<"TRANSDUCER #"<< first_state << ": "<< (*transducer)<<std::endl<<std::endl;
+						transducer = new BerrySethiTransducer(this->alphabet, monoid, monoids_count);
 						this->transducers.push_back(transducer);
 						is_first_monoid = false;
 					} else {
-						BerrySethiTransducer* transducer = new BerrySethiTransducer(this->alphabet, first_state, monoid);
-						std::cout<<"TRANSDUCER #"<< first_state << ": "<< (*transducer)<<std::endl<<std::endl;
+						transducer = new BerrySethiTransducer(this->alphabet, first_state, monoid);
 						this->transducers.push_back(transducer);
 					}
+					for (ui i = 1; i < strlen(input); i++) {
+						first_state++;
+						Monoid* monoid1 = new Monoid(input[i], "", 0);
+						BerrySethiTransducer transducer1(this->alphabet, first_state, monoid1);
+						transducer->concat(&transducer1);
+					}
+					std::cout<<"TRANSDUCER #"<< first_state << ": "<< (*transducer)<<std::endl<<std::endl;
 					first_state++;
 				}
 				break;
@@ -86,7 +92,7 @@ const char* RegExp::read_word(ui& i) {
 	for(;expression[i] != ','; i++);
 	char* word = (char*)malloc(sizeof (char) * (i - start + 1));
 	strncpy(word, expression + start, i - start);
-	word[i - start + 1] = '\0';
+	word[i - start] = '\0';
 	return word;
 }
 

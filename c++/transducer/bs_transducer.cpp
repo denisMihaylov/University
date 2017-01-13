@@ -129,32 +129,33 @@ std::ostream& operator<<(std::ostream& os, const BerrySethiTransducer& transduce
 }
 
 Transducer& BerrySethiTransducer::to_transducer() {
-	Transducer* result = new Transducer();
+	Transducer* result = new Transducer(this->alphabet);
+	
 	return *result;
 }
 
-const char* BerrySethiTransducer::getAlphabet() const {
+const char* BerrySethiTransducer::get_alphabet() const {
 	return alphabet;
 }
 
-std::vector<ui>* BerrySethiTransducer::getFirst() const {
+std::vector<ui>* BerrySethiTransducer::get_first() const {
 	return first;
 }
 
-std::vector<pair<std::vector<ui>, std::vector<ui> >*>* BerrySethiTransducer::getFollow() const {
+std::vector<pair<std::vector<ui>, std::vector<ui> >*>* BerrySethiTransducer::get_follow() const {
 	return follow;
 }
 
-bool BerrySethiTransducer::getIsFirstFinal() const {
+bool BerrySethiTransducer::first_final() const {
 	return is_first_final;
 }
 
-std::vector<ui>* BerrySethiTransducer::getLast() const {
+std::vector<ui>* BerrySethiTransducer::get_last() const {
 	return last;
 }
-std::vector<Monoid*>* BerrySethiTransducer::getQMap() const {
+std::vector<Monoid*>* BerrySethiTransducer::get_Qmap() const {
 	return q_map;
 }
-const ui& BerrySethiTransducer::getStatesCount() const {
+const ui& BerrySethiTransducer::get_states_count() const {
 	return states_count;
 }

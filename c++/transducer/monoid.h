@@ -9,11 +9,10 @@ class Monoid {
 	
 public:
 	ui serial_number;
-	const char* input;
+	const char input;
 	const char* output;
 	ui weight;
-	Monoid(){};
-	Monoid(const char* input, const char* output, ui weight):input(input), output(output), weight(weight){};
+	Monoid(const char input, const char* output, ui weight):input(input), output(output), weight(weight){};
 	
 	friend std::ostream& operator<<(std::ostream& os, const Monoid& transducer);
 };

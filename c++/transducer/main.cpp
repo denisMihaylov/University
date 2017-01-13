@@ -1,26 +1,15 @@
+#include <iostream>
+#include <cstring>
+#include <ctime>
 #include <stdio.h>
-#include <regular_exp.h>
-#include <transducer.h>
-#include <bs_transducer.h>
+#include <stdlib.h>
 
 const char* read_alphabet();
 
 int main(int argc, char **argv) {
-	//const char* alphabet = read_alphabet();
-	const char* alphabet = "abcd";
-	const char * expression = "<a, b, 1><bd, h, 2>|*<b, c, 2>.<d, e, 1>*.<c, h, f>|";
-	RegExp reg_exp(alphabet, expression);
-	BerrySethiTransducer* transducer = reg_exp.to_transducer();
-	return 0;
+	FILE *fp = fopen(argc == 2 ? argv[1] : "input1.txt", "r");
+	for (int i = 0; i < (int)1e8; i++) {
+		
+	}
 }
 
-const char* read_alphabet() {
-	ui alphabet_size;
-	scanf("%d\n", &alphabet_size);
-	char* alphabet = new char[alphabet_size + 1];
-	for (ui i = 0; i < alphabet_size; i++) {
-		scanf(" %c", alphabet + i);
-	}
-	alphabet[alphabet_size] = '\0';
-	return alphabet;
-}

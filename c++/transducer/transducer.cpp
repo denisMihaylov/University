@@ -1,14 +1,18 @@
 #include <transducer.h>
 #include <stdio.h>
 
-
-
-void Transducer::init_internal_members(const char* alphabet) {
+Transducer::Transducer(const char* alphabet) {
 	this->alphabet = alphabet;
-	this->states_count = 0;
-	this->final_states.reserve(16);
+	starting_state = 0;
 }
 
-Transducer::Transducer() {
-	this->init_internal_members(alphabet);
+void Transducer::set_states_count(ui states_count) {
+	this->states_count = states_count;
+}
+
+void Transducer::set_receiving_states(states_vector* receiving_states, bool is_first_final) {
+	this->receiving_states = receiving_states;
+	if (is_first_final) {
+		this->receiving_states->insert(this->receiving_states->begin(), 0);
+	}
 }
