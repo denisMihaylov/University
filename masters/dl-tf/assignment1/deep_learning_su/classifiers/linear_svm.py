@@ -57,32 +57,25 @@ def svm_loss_vectorized(W, X, y, reg):
 
   Inputs and outputs are the same as svm_loss_naive.
   """
-  loss = 0.0
+  num_classes = W.shape[1]
+  num_train = X.shape[0]
+  scores = np.matmul(X, W)
+  rows = np.arange(len(scores))
+  correct_class_score = scores[rows, y].reshape(y.shape[0], 1)
+  mask = np.ones(scores.shape)
+  mask[rows, y] = 0
+  margin = scores - correct_class_score + mask
+  positive_margins = margin > 0
+  loss = margin[positive_margins].sum()
+  loss /= num_train
+  loss += reg * np.sum(W * W)
+
   dW = np.zeros(W.shape) # initialize the gradient as zero
+  mask1 = np.zeros(W.shape)
+  mask1[rows, y] = 1
+  dW = np.matmul(X.T, positive_margins)
 
-  #############################################################################
-  # TODO:                                                                     #
-  # Implement a vectorized version of the structured SVM loss, storing the    #
-  # result in loss.                                                           #
-  #############################################################################
-  pass
-  #############################################################################
-  #                             END OF YOUR CODE                              #
-  #############################################################################
-
-
-  #############################################################################
-  # TODO:                                                                     #
-  # Implement a vectorized version of the gradient for the structured SVM     #
-  # loss, storing the result in dW.                                           #
-  #                                                                           #
-  # Hint: Instead of computing the gradient from scratch, it may be easier    #
-  # to reuse some of the intermediate values that you used to compute the     #
-  # loss.                                                                     #
-  #############################################################################
-  pass
-  #############################################################################
-  #                             END OF YOUR CODE                              #
-  #############################################################################
+  dW /= num_train
+  dW += reg * 2 * W
 
   return loss, dW
