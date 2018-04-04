@@ -1,5 +1,4 @@
 import numpy as np
-from random import shuffle
 from past.builtins import xrange
 
 
@@ -57,7 +56,6 @@ def svm_loss_vectorized(W, X, y, reg):
 
   Inputs and outputs are the same as svm_loss_naive.
   """
-  num_classes = W.shape[1]
   num_train = X.shape[0]
   scores = np.matmul(X, W)
   rows = np.arange(len(scores))
