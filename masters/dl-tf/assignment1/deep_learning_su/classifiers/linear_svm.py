@@ -70,10 +70,10 @@ def svm_loss_vectorized(W, X, y, reg):
   loss /= num_train
   loss += reg * np.sum(W * W)
 
-  dW = np.zeros(W.shape) # initialize the gradient as zero
-  mask1 = np.zeros(W.shape)
-  mask1[rows, y] = 1
-  dW = np.matmul(X.T, positive_margins)
+  errors_count = positive_margins.sum(axis=1)
+  mask_correct_labels = np.zeros(scores.shape)
+  mask_correct_labels[rows, y] = errors_count
+  dW = np.matmul(X.T, positive_margins) - np.matmul(X.T, mask_correct_labels)
 
   dW /= num_train
   dW += reg * 2 * W
