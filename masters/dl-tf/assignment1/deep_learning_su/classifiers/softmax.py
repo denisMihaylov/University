@@ -29,20 +29,14 @@ def softmax_loss_naive(W, X, y, reg):
     scores = X[i].dot(W)
     scores = scores - scores.max()
     scores = np.exp(scores)
-    correct_class_score = scores[y[i]]
-    correct_probability = correct_class_score / scores.sum()
+    softmax_values = scores / scores.sum()
+    correct_probability = softmax_values[y[i]]
     loss += -np.log(correct_probability)
-
-  #############################################################################
-  # TODO: Compute the softmax loss and its gradient using explicit loops.     #
-  # Store the loss in loss and the gradient in dW. If you are not careful     #
-  # here, it is easy to run into numeric instability. Don't forget the        #
-  # regularization!                                                           #
-  #############################################################################
-  pass
-  #############################################################################
-  #                          END OF YOUR CODE                                 #
-  #############################################################################
+    for j in xrange(num_classes):
+        if j == y[i]:
+            dW[:, j] -= X[i] * (1 - softmax_values[j])
+        else:
+            dW[:, j] += softmax_values[j] * X[i]
 
   loss /= num_train
   dW /= num_train
