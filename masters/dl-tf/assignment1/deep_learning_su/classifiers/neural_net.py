@@ -3,6 +3,7 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from past.builtins import xrange
+from .softmax import softmax, softmax_loss_vectorized
 
 class TwoLayerNet(object):
   """
@@ -41,6 +42,7 @@ class TwoLayerNet(object):
     self.params['W2'] = std * np.random.randn(hidden_size, output_size)
     self.params['b2'] = np.zeros(output_size)
 
+
   def loss(self, X, y=None, reg=0.0):
     """
     Compute the loss and gradients for a two layer fully connected neural
@@ -64,29 +66,28 @@ class TwoLayerNet(object):
     - grads: Dictionary mapping parameter names to gradients of those parameters
       with respect to the loss function; has the same keys as self.params.
     """
+
+    def relu(x):
+        x[x < 0] = 0
+        return x
     # Unpack variables from the params dictionary
     W1, b1 = self.params['W1'], self.params['b1']
     W2, b2 = self.params['W2'], self.params['b2']
+    X = np.hstack([X, np.ones((X.shape[0], 1))])
+    W1 = np.vstack([W1, b1])
+    out1 = relu(X.dot(W1))
+    out1 = np.hstack([out1, np.ones((out1.shape[0], 1))])
+    W2 = np.vstack([W2, b2])
     N, D = X.shape
+    scores = out1.dot(W2)
 
-    # Compute the forward pass
-    scores = None
-    #############################################################################
-    # TODO: Perform the forward pass, computing the class scores for the input. #
-    # Store the result in the scores variable, which should be an array of      #
-    # shape (N, C).                                                             #
-    #############################################################################
-    pass
-    #############################################################################
-    #                              END OF YOUR CODE                             #
-    #############################################################################
-    
     # If the targets are not given then jump out, we're done
     if y is None:
       return scores
 
     # Compute the loss
-    loss = None
+    loss = softmax_loss_vectorized(W2, scores, y, reg)
+
     #############################################################################
     # TODO: Finish the forward pass, and compute the loss. This should include  #
     # both the data loss and L2 regularization for W1 and W2. Store the result  #
@@ -215,5 +216,3 @@ class TwoLayerNet(object):
     ###########################################################################
 
     return y_pred
-
-
