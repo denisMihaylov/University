@@ -3,7 +3,8 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from past.builtins import xrange
-from .softmax import softmax, softmax_loss_vectorized
+from .softmax import softmax_loss_vectorized
+from .linear_svm import svm_loss_vectorized
 
 class TwoLayerNet(object):
   """
@@ -68,14 +69,15 @@ class TwoLayerNet(object):
     """
 
     def relu(x):
-        x[x < 0] = 0
-        return x
+        return np.maximum(x, 0)
     # Unpack variables from the params dictionary
+    num_train = X.shape[0]
     W1, b1 = self.params['W1'], self.params['b1']
     W2, b2 = self.params['W2'], self.params['b2']
     X = np.hstack([X, np.ones((X.shape[0], 1))])
     W1 = np.vstack([W1, b1])
-    out1 = relu(X.dot(W1))
+    out1 = X.dot(W1)
+    out1 = relu(out1)
     out1 = np.hstack([out1, np.ones((out1.shape[0], 1))])
     W2 = np.vstack([W2, b2])
     N, D = X.shape
@@ -86,21 +88,29 @@ class TwoLayerNet(object):
       return scores
 
     # Compute the loss
-    loss = softmax_loss_vectorized(W2, scores, y, reg)
+    # print(X.shape)
+    # print(y.shape)
+    # print(W1.shape)
+    loss, grad = softmax_loss_vectorized(W2, out1, y, reg)
+    loss += reg * np.sum(W1 * W1)
 
-    #############################################################################
-    # TODO: Finish the forward pass, and compute the loss. This should include  #
-    # both the data loss and L2 regularization for W1 and W2. Store the result  #
-    # in the variable loss, which should be a scalar. Use the Softmax           #
-    # classifier loss.                                                          #
-    #############################################################################
-    pass
-    #############################################################################
-    #                              END OF YOUR CODE                             #
-    #############################################################################
+    mask = np.ones_like(out1[:, :-1])
+    mask[out1[:, :-1] == 0.0] = 0
+    # print(grad[:-1].sum(axis=1))
+    grad_out1 = X.T.dot(mask) * grad[:-1].sum(axis=1)
+    # print(grad_out1)
+
+    grad_out1 = grad_out1 + reg * 2 * W1
+    # print(grad_out1.shape)
+    # grad_out1 = grad_out1.dot(grad)
+    # print(grad_out1.shape)
 
     # Backward pass: compute gradients
-    grads = {}
+    grads = {
+        'W2': grad[:-1],
+        'b2': grad[-1],
+        'W1': grad_out1[:-1],
+        'b1': grad_out1[-1]}
     #############################################################################
     # TODO: Compute the backward pass, computing the derivatives of the weights #
     # and biases. Store the results in the grads dictionary. For example,       #
