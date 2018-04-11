@@ -3,7 +3,7 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from past.builtins import xrange
-from .softmax import softmax_loss_vectorized
+from .softmax import softmax_loss_vectorized, softmax_loss_vectorized_with_error_signal
 from .linear_svm import svm_loss_vectorized
 
 class TwoLayerNet(object):
@@ -91,19 +91,18 @@ class TwoLayerNet(object):
     # print(X.shape)
     # print(y.shape)
     # print(W1.shape)
-    loss, grad = softmax_loss_vectorized(W2, out1, y, reg)
+    loss, grad, error_signal = softmax_loss_vectorized_with_error_signal(W2, out1, y, reg)
+    # print(grad)
+
+    mask = np.ones_like(out1)
+    mask[out1 == 0.0] = 0
+    print(mask)
+    grad_out1 = X.T.dot(error_signal)[:, :-1]
+    print(grad_out1)
+    grad_out1 /= num_train
+
     loss += reg * np.sum(W1 * W1)
-
-    mask = np.ones_like(out1[:, :-1])
-    mask[out1[:, :-1] == 0.0] = 0
-    # print(grad[:-1].sum(axis=1))
-    grad_out1 = X.T.dot(mask) * grad[:-1].sum(axis=1)
-    # print(grad_out1)
-
     grad_out1 = grad_out1 + reg * 2 * W1
-    # print(grad_out1.shape)
-    # grad_out1 = grad_out1.dot(grad)
-    # print(grad_out1.shape)
 
     # Backward pass: compute gradients
     grads = {
