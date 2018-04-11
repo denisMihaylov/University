@@ -78,7 +78,7 @@ def softmax_loss_vectorized(W, X, y, reg):
   return loss, dW
 
 
-def softmax_loss_vectorized_with_error_signal(W, X, y, reg):
+def softmax_with_error_signal(W, X, y, reg):
     """
     Softmax loss function, vectorized version.
 
@@ -89,15 +89,12 @@ def softmax_loss_vectorized_with_error_signal(W, X, y, reg):
     softmax_values = softmax(X.dot(W))
     rows = np.arange(softmax_values.shape[0])
     correct_probability = softmax_values[rows, y]
-    loss = np.sum(-np.log(correct_probability))
+    loss = np.sum(-np.log(correct_probability)) / num_train
     softmax_values[rows, y] -= 1
     dW = X.T.dot(softmax_values)
 
-    loss /= num_train
     dW /= num_train
-    # print(softmax_values)
     error_signal = softmax_values.dot(W.T)
-    # print(error_signal[-1])
 
     loss += reg * np.sum(W * W)
     dW += reg * 2 * W

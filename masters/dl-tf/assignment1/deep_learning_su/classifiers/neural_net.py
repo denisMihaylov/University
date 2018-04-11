@@ -3,7 +3,7 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from past.builtins import xrange
-from .softmax import softmax_loss_vectorized, softmax_loss_vectorized_with_error_signal
+from .softmax import softmax_loss_vectorized, softmax_with_error_signal
 from .linear_svm import svm_loss_vectorized
 
 class TwoLayerNet(object):
@@ -88,17 +88,9 @@ class TwoLayerNet(object):
       return scores
 
     # Compute the loss
-    # print(X.shape)
-    # print(y.shape)
-    # print(W1.shape)
-    loss, grad, error_signal = softmax_loss_vectorized_with_error_signal(W2, out1, y, reg)
-    # print(grad)
-
-    mask = np.ones_like(out1)
-    mask[out1 == 0.0] = 0
-    print(mask)
+    loss, grad, error_signal = softmax_with_error_signal(W2, out1, y, reg)
+    error_signal[out1 == 0.0] = 0
     grad_out1 = X.T.dot(error_signal)[:, :-1]
-    print(grad_out1)
     grad_out1 /= num_train
 
     loss += reg * np.sum(W1 * W1)
@@ -109,16 +101,8 @@ class TwoLayerNet(object):
         'W2': grad[:-1],
         'b2': grad[-1],
         'W1': grad_out1[:-1],
-        'b1': grad_out1[-1]}
-    #############################################################################
-    # TODO: Compute the backward pass, computing the derivatives of the weights #
-    # and biases. Store the results in the grads dictionary. For example,       #
-    # grads['W1'] should store the gradient on W1, and be a matrix of same size #
-    #############################################################################
-    pass
-    #############################################################################
-    #                              END OF YOUR CODE                             #
-    #############################################################################
+        'b1': grad_out1[-1]
+    }
 
     return loss, grads
 
