@@ -43,7 +43,6 @@ class TwoLayerNet(object):
     self.params['W2'] = std * np.random.randn(hidden_size, output_size)
     self.params['b2'] = np.zeros(output_size)
 
-
   def loss(self, X, y=None, reg=0.0):
     """
     Compute the loss and gradients for a two layer fully connected neural
@@ -158,8 +157,8 @@ class TwoLayerNet(object):
             train_acc_history.append(train_acc)
             val_acc_history.append(val_acc)
 
-        # Decay learning rate
-        learning_rate *= learning_rate_decay
+            # Decay learning rate
+            learning_rate *= learning_rate_decay
 
     return {
       'loss_history': loss_history,
@@ -182,14 +181,16 @@ class TwoLayerNet(object):
       the elements of X. For all i, y_pred[i] = c means that X[i] is predicted
       to have class c, where 0 <= c < C.
     """
-    y_pred = None
-
-    ###########################################################################
-    # TODO: Implement this function; it should be VERY simple!                #
-    ###########################################################################
-    pass
-    ###########################################################################
-    #                              END OF YOUR CODE                           #
-    ###########################################################################
-
-    return y_pred
+    def relu(x):
+        return np.maximum(x, 0)
+    W1, b1 = self.params['W1'], self.params['b1']
+    W2, b2 = self.params['W2'], self.params['b2']
+    X = np.hstack([X, np.ones((X.shape[0], 1))])
+    W1 = np.vstack([W1, b1])
+    out1 = X.dot(W1)
+    out1 = relu(out1)
+    out1 = np.hstack([out1, np.ones((out1.shape[0], 1))])
+    W2 = np.vstack([W2, b2])
+    N, D = X.shape
+    scores = out1.dot(W2)
+    return scores.argmax(axis=1)
