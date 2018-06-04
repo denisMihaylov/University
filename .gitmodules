@@ -1,0 +1,3 @@
+[submodule "masters/dl-tf/assignments"]
+	path = masters/dl-tf/assignments
+	url = https://github.com/denisMihaylov/deep-learning-su-assignments.git
