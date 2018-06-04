@@ -1,3 +1,6 @@
 [submodule "masters/dl-tf/assignments"]
 	path = masters/dl-tf/assignments
 	url = https://github.com/denisMihaylov/deep-learning-su-assignments.git
+[submodule "masters/textrank"]
+	path = masters/information-retrieval/textrank
+	url = https://github.com/stoyaneft/textrank
