@@ -4,3 +4,6 @@
 [submodule "masters/textrank"]
 	path = masters/information-retrieval/textrank
 	url = https://github.com/stoyaneft/textrank
+[submodule "masters/neural-networks"]
+	path = masters/neural-networks
+	url = https://github.com/denisMihaylov/neural-networks-su.git
