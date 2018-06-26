@@ -7,3 +7,6 @@
 [submodule "masters/neural-networks"]
 	path = masters/neural-networks
 	url = https://github.com/denisMihaylov/neural-networks-su.git
+[submodule "masters/recommender-systems/recsys_wiki_to_boost_svd"]
+	path = masters/recommender-systems/recsys_wiki_to_boost_svd
+	url = https://github.com/kal0ian/recsys_wiki_to_boost_svd.git
